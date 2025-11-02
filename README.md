@@ -14,18 +14,6 @@ Quick repo pointers
 
 # eShop Microservices - High Level Design
 
-## 📋 Table of Contents
-- [Overview](#overview)
-- [Architecture Diagram](#architecture-diagram)
-- [Backend Services](#backend-services)
-- [Infrastructure & Deployment](#infrastructure--deployment)
-- [CI/CD Pipeline](#cicd-pipeline)
-- [GitOps with FluxCD](#gitops-with-fluxcd)
-- [Observability Stack](#observability-stack)
-- [Repository Links](#repository-links)
-
----
-
 ## 🎯 Overview
 
 eShop Microservices is a production-grade distributed e-commerce system demonstrating modern cloud-native patterns and practices.
