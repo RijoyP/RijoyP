@@ -5,8 +5,12 @@ Summary
 - Deployed on AKS using Flux GitOps and Azure infrastructure provisioned via Terraform (CICD-Templates + terraform-modules).  
 - CI builds images, pushes to ACR, and updates the GitOps repo; Flux reconciles cluster state.
 
-Mermaid: high-level diagram
-Unable to render rich display
+Quick repo pointers
+- Services code: c:\Learn\github\eShopMicroServices\Services\*
+- GitOps manifests: https://github.com/RijoyP/GitOps
+- Terraform modules: https://github.com/RijoyP/terraform-modules
+- CICD templates & generator: https://github.com/RijoyP/-CICD-Templates 
+- Helm boilerplate chart: https://github.com/RijoyP/helm-templates
 
 Services — purpose, importance, and key integrations
 
@@ -86,11 +90,4 @@ Operational recommendations
 - Use feature toggles and safe DB migrations for rollout.
 - Monitor SLOs: cart success rate, order throughput, event lag, DB latency.
 
-Quick repo pointers
-- Services code: c:\Learn\github\eShopMicroServices\Services\*
-- GitOps manifests: c:\Learn\github\GitOps\eShopMicroService\ (apps/ and infrastructure/)
-- Terraform modules: c:\Learn\github\terraform-modules\Modules\*
-- CICD templates & generator: c:\Learn\github\CICD-Templates\applications\scripts\generate-profiles.ps1
-- Helm boilerplate chart: c:\Learn\github\helm-templates\app-boilerplate-chart
 
-If needed, a short README per service with build/run/deploy steps can be created next. 
