@@ -105,13 +105,13 @@ eShop Microservices is a production-grade distributed e-commerce system demonstr
 ┌─────────────────────────────────────────────────────────────────────────┐
 │                         FLUXCD GITOPS                                   │
 │  ┌──────────────────────────────────────────────────────────┐           │
-│  │  Source Controller → Kustomize Controller → Apply         │          │
+│  │  Source Controller → Kustomize Controller → Apply        │           │
 │  └────────────────┬─────────────────────────────────────────┘           │
 │                   │ Git Sync (1-5 min)                                  │
 │  ┌────────────────▼─────────────────────────────────────────┐           │
-│  │  GitOps Repository                                        │          │
-│  │    /infrastructure  → Platform components                 │          │
-│  │    /apps           → Application manifests                │          │
+│  │  GitOps Repository                                       │           │
+│  │    /infrastructure  → Platform components                │           │
+│  │    /apps           → Application manifests               │           │
 │  └──────────────────────────────────────────────────────────┘           │ 
 └─────────────────────────────────────────────────────────────────────────┘
 
