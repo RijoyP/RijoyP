@@ -12,411 +12,586 @@ Quick repo pointers
 - CICD templates & generator: https://github.com/RijoyP/CICD-Templates 
 - Helm boilerplate chart: https://github.com/RijoyP/helm-templates
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>eShop Microservices Architecture</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+# eShop Microservices - High Level Design
 
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            padding: 20px;
-            overflow-x: auto;
-        }
+## 📋 Table of Contents
+- [Overview](#overview)
+- [Architecture Diagram](#architecture-diagram)
+- [Backend Services](#backend-services)
+- [Infrastructure & Deployment](#infrastructure--deployment)
+- [CI/CD Pipeline](#cicd-pipeline)
+- [GitOps with FluxCD](#gitops-with-fluxcd)
+- [Observability Stack](#observability-stack)
+- [Repository Links](#repository-links)
 
-        .container {
-            background: white;
-            border-radius: 12px;
-            padding: 30px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-            min-width: 1200px;
-        }
+---
 
-        h1 {
-            text-align: center;
-            color: #2c3e50;
-            margin-bottom: 10px;
-            font-size: 28px;
-        }
+## 🎯 Overview
 
-        .subtitle {
-            text-align: center;
-            color: #7f8c8d;
-            margin-bottom: 30px;
-            font-size: 14px;
-        }
+eShop Microservices is a production-grade distributed e-commerce system demonstrating modern cloud-native patterns and practices.
 
-        .layer {
-            margin-bottom: 20px;
-            border: 2px solid #e0e0e0;
-            border-radius: 8px;
-            padding: 15px;
-            position: relative;
-        }
+**Technology Stack:**
+- **.NET 8** - Backend microservices
+- **Azure Application Gateway** - API Gateway with Azure AD authentication
+- **Docker & AKS** - Containerization and orchestration
+- **FluxCD** - GitOps continuous delivery
+- **RabbitMQ** - Event-driven messaging
+- **Terraform** - Infrastructure as Code
+- **Azure DevOps** - CI/CD automation
 
-        .layer-title {
-            position: absolute;
-            top: -12px;
-            left: 20px;
-            background: white;
-            padding: 0 10px;
-            font-weight: bold;
-            font-size: 13px;
-            color: #34495e;
-        }
+---
 
-        .layer-content {
-            display: flex;
-            justify-content: space-around;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 15px;
-            min-height: 80px;
-        }
+## 🏗️ Architecture Diagram
 
-        .component {
-            padding: 15px 25px;
-            border-radius: 8px;
-            font-size: 13px;
-            font-weight: 500;
-            text-align: center;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            transition: transform 0.2s, box-shadow 0.2s;
-            cursor: pointer;
-        }
+### High-Level System Architecture
 
-        .component:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
-        }
+```
+┌─────────────────────────────────────────────────────────────────────────┐
+│                          CLIENT LAYER                                    │
+│                     ┌──────────────────────┐                            │
+│                     │   Shopping.Web       │                            │
+│                     │   (ASP.NET Core)     │                            │
+│                     └──────────┬───────────┘                            │
+└────────────────────────────────┼────────────────────────────────────────┘
+                                 │ HTTPS
+                                 ▼
+┌─────────────────────────────────────────────────────────────────────────┐
+│                    API GATEWAY LAYER                                     │
+│         ┌────────────────────────────────────────────────┐             │
+│         │    Azure Application Gateway                   │             │
+│         │  + Web Application Firewall (WAF)              │             │
+│         │  + Azure AD Authentication                     │             │
+│         │  + SSL/TLS Termination                         │             │
+│         │  + URL Routing & Path-based Routing            │             │
+│         │  + Load Balancing                              │             │
+│         └──────┬─────────┬─────────┬─────────────────────┘             │
+└────────────────┼─────────┼─────────┼─────────────────────────────────────┘
+                 │         │         │
+        ┌────────┼─────────┼─────────┼─────────────┐
+        │        │         │         │             │
+        ▼        ▼         ▼         ▼             │
+┌──────────────────────────────────────────────────┼────────────────────┐
+│  MICROSERVICES LAYER                             │                     │
+│  ┌──────────┐  ┌──────────┐  ┌──────────┐  ┌────────▼──────┐        │
+│  │ Catalog  │  │ Basket   │  │ Discount │  │   Ordering    │        │
+│  │   API    │  │   API    │  │   API    │  │     API       │        │
+│  └────┬─────┘  └────┬─────┘  └────┬─────┘  └────────┬──────┘        │
+│       │             │              │                  │                │
+│       ▼             ▼              ▼                  ▼                │
+│  ┌────────┐    ┌────────┐    ┌────────┐        ┌──────────┐         │
+│  │Postgre │    │Postgre │    │ SQLite │        │   SQL    │         │
+│  │  SQL   │    │SQL+Redis    │        │        │  Server  │         │
+│  └────────┘    └────────┘    └────────┘        └──────────┘         │
+└─────────────────────────────┬──────────────────────────────────────────┘
+                              │
+                              ▼
+┌─────────────────────────────────────────────────────────────────────────┐
+│                      MESSAGING LAYER                                     │
+│                  ┌────────────────────────┐                             │
+│                  │      RabbitMQ          │                             │
+│                  │   Event-Driven Bus     │                             │
+│                  └────────────────────────┘                             │
+└─────────────────────────────────────────────────────────────────────────┘
+                              ▼
+┌─────────────────────────────────────────────────────────────────────────┐
+│                    AZURE KUBERNETES SERVICE (AKS)                        │
+│  ┌────────────────────────────────────────────────────────────┐        │
+│  │  Ingress Controller │ Service Mesh │ Azure Key Vault       │        │
+│  └────────────────────────────────────────────────────────────┘        │
+└─────────────────────────┬───────────────────────────────────────────────┘
+                          │
+                          │ GitOps Sync
+                          ▼
+┌─────────────────────────────────────────────────────────────────────────┐
+│                         FLUXCD GITOPS                                    │
+│  ┌──────────────────────────────────────────────────────────┐          │
+│  │  Source Controller → Kustomize Controller → Apply         │          │
+│  └────────────────┬─────────────────────────────────────────┘          │
+│                   │ Git Sync (1-5 min)                                  │
+│  ┌────────────────▼─────────────────────────────────────────┐          │
+│  │  GitOps Repository                                        │          │
+│  │    /infrastructure  → Platform components                 │          │
+│  │    /apps           → Application manifests                │          │
+│  └──────────────────────────────────────────────────────────┘          │
+└─────────────────────────────────────────────────────────────────────────┘
 
-        .component-title {
-            font-weight: bold;
-            margin-bottom: 5px;
-        }
+┌─────────────────────────────────────────────────────────────────────────┐
+│                    OBSERVABILITY STACK                                   │
+│  ┌───────────┐  ┌───────────┐  ┌───────────┐  ┌──────────┐           │
+│  │  Logging  │  │  Tracing  │  │Monitoring │  │ Alerting │           │
+│  │ (ELK/PLG) │  │  (Jaeger) │  │(Prometheus│  │ (Grafana)│           │
+│  └───────────┘  └───────────┘  └───────────┘  └──────────┘           │
+└─────────────────────────────────────────────────────────────────────────┘
 
-        .component-subtitle {
-            font-size: 11px;
-            opacity: 0.8;
-        }
+┌─────────────────────────────────────────────────────────────────────────┐
+│                         CI/CD PIPELINE                                   │
+│  Code Push → Build & Test → Docker Build → ACR Push → Update GitOps    │
+│                            → FluxCD Auto Deploy                          │
+└─────────────────────────────────────────────────────────────────────────┘
+```
 
-        .client { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; }
-        .gateway { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white; }
-        .service { background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); color: white; }
-        .database { background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); color: white; }
-        .messaging { background: linear-gradient(135deg, #fa709a 0%, #fee140 100%); color: white; }
-        .k8s { background: linear-gradient(135deg, #30cfd0 0%, #330867 100%); color: white; }
-        .gitops { background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%); color: #333; }
-        .observability { background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%); color: #333; }
-        .cicd { background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%); color: #333; }
+---
 
-        .arrow {
-            text-align: center;
-            font-size: 24px;
-            color: #7f8c8d;
-            margin: 10px 0;
-        }
+## 🔧 Backend Services
 
-        .services-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 15px;
-        }
+### Service Overview
 
-        .service-detail {
-            padding: 12px;
-            border-radius: 6px;
-            font-size: 11px;
-        }
+| Service | Database | Purpose | Key Features |
+|---------|----------|---------|--------------|
+| **Catalog API** | PostgreSQL | Product management | Product CRUD, categories, inventory, search |
+| **Basket API** | PostgreSQL + Redis | Shopping cart | Cart operations, session management, checkout |
+| **Discount API** | SQLite | Promotions | Coupon validation, discount calculation |
+| **Ordering API** | SQL Server | Order processing | DDD implementation, order lifecycle, payments |
 
-        .db-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 15px;
-        }
+**Source Code**: [eShopMicroservices/Services](https://github.com/RijoyP/eShopMicroservices/tree/main/Services)
 
-        .infra-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 15px;
-        }
+---
 
-        .obs-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 15px;
-        }
+### 1. Catalog API
 
-        .small-component {
-            padding: 10px 15px;
-            font-size: 11px;
-        }
+**Purpose**: Product catalog and inventory management
 
-        .legend {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            margin-top: 30px;
-            padding: 15px;
-            background: #f8f9fa;
-            border-radius: 8px;
-        }
+**Tech Stack**: ASP.NET Core (.NET 8) + PostgreSQL + Redis
 
-        .legend-item {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 12px;
-        }
+**Key Responsibilities:**
+- Product and category management
+- Real-time inventory tracking
+- Search and filtering
+- Image management
+- Integration with Azure Blob Storage
 
-        .legend-box {
-            width: 30px;
-            height: 20px;
-            border-radius: 4px;
-        }
+**Why PostgreSQL?** Complex queries, JSON support, full-text search, ACID compliance for inventory
 
-        @media print {
-            body {
-                background: white;
-                padding: 0;
-            }
-            .container {
-                box-shadow: none;
-            }
-        }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <h1>🏗️ eShop Microservices - High Level Architecture</h1>
-        <p class="subtitle">Production-Grade Cloud-Native E-Commerce System</p>
+---
 
-        <!-- Client Layer -->
-        <div class="layer">
-            <div class="layer-title">CLIENT LAYER</div>
-            <div class="layer-content">
-                <div class="component client">
-                    <div class="component-title">Shopping.Web</div>
-                    <div class="component-subtitle">ASP.NET Core MVC/Blazor</div>
-                </div>
-            </div>
-        </div>
+### 2. Basket API
 
-        <div class="arrow">↓ HTTPS</div>
+**Purpose**: Shopping cart and session management
 
-        <!-- API Gateway Layer -->
-        <div class="layer">
-            <div class="layer-title">API GATEWAY LAYER</div>
-            <div class="layer-content">
-                <div class="component gateway">
-                    <div class="component-title">YARP API Gateway</div>
-                    <div class="component-subtitle">Azure AD Authentication • Routing • Rate Limiting</div>
-                </div>
-            </div>
-        </div>
+**Tech Stack**: ASP.NET Core (.NET 8) + PostgreSQL + Redis
 
-        <div class="arrow">↓</div>
+**Key Responsibilities:**
+- Add/remove cart items
+- Calculate totals
+- Apply discounts
+- Session persistence
+- Checkout coordination
 
-        <!-- Microservices Layer -->
-        <div class="layer">
-            <div class="layer-title">MICROSERVICES LAYER</div>
-            <div class="layer-content">
-                <div class="services-grid">
-                    <div class="component service service-detail">
-                        <div class="component-title">Catalog API</div>
-                        <div class="component-subtitle">.NET 8</div>
-                        <div style="margin-top: 8px; font-size: 10px;">
-                            Products<br>
-                            Categories<br>
-                            Inventory
-                        </div>
-                    </div>
-                    <div class="component service service-detail">
-                        <div class="component-title">Basket API</div>
-                        <div class="component-subtitle">.NET 8</div>
-                        <div style="margin-top: 8px; font-size: 10px;">
-                            Cart Mgmt<br>
-                            Sessions<br>
-                            Checkout
-                        </div>
-                    </div>
-                    <div class="component service service-detail">
-                        <div class="component-title">Discount API</div>
-                        <div class="component-subtitle">.NET 8</div>
-                        <div style="margin-top: 8px; font-size: 10px;">
-                            Coupons<br>
-                            Promotions<br>
-                            Rules
-                        </div>
-                    </div>
-                    <div class="component service service-detail">
-                        <div class="component-title">Ordering API</div>
-                        <div class="component-subtitle">.NET 8 + DDD</div>
-                        <div style="margin-top: 8px; font-size: 10px;">
-                            Orders<br>
-                            Payments<br>
-                            Fulfillment
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+**Dual Database Strategy:**
+- **PostgreSQL**: Persistent cart history and audit trails
+- **Redis**: High-speed active cart operations and sessions
 
-        <div class="arrow">↓</div>
+**Event Publishing**: Publishes `BasketCheckedOut` event to trigger order creation
 
-        <!-- Data Layer -->
-        <div class="layer">
-            <div class="layer-title">DATA PERSISTENCE LAYER</div>
-            <div class="layer-content">
-                <div class="db-grid">
-                    <div class="component database small-component">
-                        <div class="component-title">PostgreSQL</div>
-                        <div class="component-subtitle">Catalog DB</div>
-                    </div>
-                    <div class="component database small-component">
-                        <div class="component-title">PostgreSQL + Redis</div>
-                        <div class="component-subtitle">Basket DB + Cache</div>
-                    </div>
-                    <div class="component database small-component">
-                        <div class="component-title">SQLite</div>
-                        <div class="component-subtitle">Discount DB</div>
-                    </div>
-                    <div class="component database small-component">
-                        <div class="component-title">SQL Server</div>
-                        <div class="component-subtitle">Ordering DB</div>
-                    </div>
-                </div>
-            </div>
-        </div>
+---
 
-        <div class="arrow">↓</div>
+### 3. Discount API
 
-        <!-- Messaging Layer -->
-        <div class="layer">
-            <div class="layer-title">EVENT-DRIVEN MESSAGING LAYER</div>
-            <div class="layer-content">
-                <div class="component messaging">
-                    <div class="component-title">RabbitMQ</div>
-                    <div class="component-subtitle">Event Bus • Async Communication • Queues & Exchanges</div>
-                </div>
-            </div>
-        </div>
+**Purpose**: Coupon and promotion management
 
-        <div class="arrow">↓</div>
+**Tech Stack**: ASP.NET Core (.NET 8) + SQLite + Redis
 
-        <!-- Kubernetes Layer -->
-        <div class="layer">
-            <div class="layer-title">AZURE KUBERNETES SERVICE (AKS)</div>
-            <div class="layer-content">
-                <div class="infra-grid">
-                    <div class="component k8s small-component">
-                        <div class="component-title">Ingress Controller</div>
-                        <div class="component-subtitle">NGINX</div>
-                    </div>
-                    <div class="component k8s small-component">
-                        <div class="component-title">Service Mesh</div>
-                        <div class="component-subtitle">Traffic Mgmt</div>
-                    </div>
-                    <div class="component k8s small-component">
-                        <div class="component-title">Azure Key Vault</div>
-                        <div class="component-subtitle">Secrets</div>
-                    </div>
-                </div>
-            </div>
-        </div>
+**Key Responsibilities:**
+- Coupon code validation
+- Discount calculation engine
+- Promotion rules management
+- Time-bound offers
 
-        <div class="arrow">↕ GitOps Sync</div>
+**Why SQLite?** Lightweight, low data volume, simplified deployment for rules-based data
 
-        <!-- GitOps Layer -->
-        <div class="layer">
-            <div class="layer-title">GITOPS WITH FLUXCD</div>
-            <div class="layer-content">
-                <div class="infra-grid">
-                    <div class="component gitops small-component">
-                        <div class="component-title">Source Controller</div>
-                        <div class="component-subtitle">Git Monitor</div>
-                    </div>
-                    <div class="component gitops small-component">
-                        <div class="component-title">Kustomize Controller</div>
-                        <div class="component-subtitle">Apply Manifests</div>
-                    </div>
-                    <div class="component gitops small-component">
-                        <div class="component-title">GitOps Repository</div>
-                        <div class="component-subtitle">/apps + /infrastructure</div>
-                    </div>
-                </div>
-            </div>
-        </div>
+---
 
-        <!-- Observability Layer -->
-        <div class="layer">
-            <div class="layer-title">OBSERVABILITY STACK</div>
-            <div class="layer-content">
-                <div class="obs-grid">
-                    <div class="component observability small-component">
-                        <div class="component-title">Logging</div>
-                        <div class="component-subtitle">ELK / PLG Stack</div>
-                    </div>
-                    <div class="component observability small-component">
-                        <div class="component-title">Tracing</div>
-                        <div class="component-subtitle">Jaeger</div>
-                    </div>
-                    <div class="component observability small-component">
-                        <div class="component-title">Monitoring</div>
-                        <div class="component-subtitle">Prometheus</div>
-                    </div>
-                    <div class="component observability small-component">
-                        <div class="component-title">Visualization</div>
-                        <div class="component-subtitle">Grafana</div>
-                    </div>
-                </div>
-            </div>
-        </div>
+### 4. Ordering API - Domain-Driven Design
 
-        <!-- CI/CD Layer -->
-        <div class="layer">
-            <div class="layer-title">CI/CD PIPELINE</div>
-            <div class="layer-content">
-                <div class="component cicd">
-                    <div class="component-title">Azure DevOps Pipeline</div>
-                    <div class="component-subtitle">Build → Test → Docker Build → ACR Push → GitOps Update → FluxCD Deploy</div>
-                </div>
-            </div>
-        </div>
+**Purpose**: Complete order lifecycle management
 
-        <!-- Legend -->
-        <div class="legend">
-            <div class="legend-item">
-                <div class="legend-box" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);"></div>
-                <span>Client Apps</span>
-            </div>
-            <div class="legend-item">
-                <div class="legend-box" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);"></div>
-                <span>Microservices</span>
-            </div>
-            <div class="legend-item">
-                <div class="legend-box" style="background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);"></div>
-                <span>Databases</span>
-            </div>
-            <div class="legend-item">
-                <div class="legend-box" style="background: linear-gradient(135deg, #30cfd0 0%, #330867 100%);"></div>
-                <span>Kubernetes</span>
-            </div>
-            <div class="legend-item">
-                <div class="legend-box" style="background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);"></div>
-                <span>GitOps</span>
-            </div>
-        </div>
-    </div>
-</body>
-</html>
+**Tech Stack**: ASP.NET Core (.NET 8) + SQL Server + RabbitMQ
+
+**Key Responsibilities:**
+- Order creation and validation
+- Payment coordination
+- Order status workflow
+- Fulfillment tracking
+
+**Why SQL Server?** Enterprise transactions, audit capabilities, reporting features, financial data consistency
+
+#### Domain-Driven Design Implementation
+
+**Bounded Context: Ordering**
+
+Core domain concepts:
+- **Order** (Aggregate Root) - Enforces business rules, controls transactions
+- **OrderItem** (Entity) - Line items within orders
+- **Address** (Value Object) - Immutable shipping/billing address
+- **Payment Info** (Value Object) - Payment details
+- **OrderStatus** (Enumeration) - Order state machine
+
+**Domain Events Published:**
+- `OrderCreated` → Triggers inventory reservation
+- `OrderPaid` → Initiates fulfillment
+- `OrderStatusChanged` → Updates tracking systems
+- `OrderShipped` → Notifies customer
+- `OrderDelivered` → Closes order
+
+#### Context Mapping
+
+```
+┌─────────────────────────────────────────────────────────┐
+│                  CONTEXT MAP                             │
+│                                                          │
+│  Catalog Context                                         │
+│       │                                                  │
+│       │ (ACL)                                           │
+│       ▼                                                  │
+│  Ordering Context ◄──(Customer/Supplier)── Basket       │
+│       │                                                  │
+│       │ (Partnership)                                   │
+│       ▼                                                  │
+│  Payment Context                                         │
+│                                                          │
+│  Discount Context ──(Conformist)──► Ordering            │
+│                                                          │
+└─────────────────────────────────────────────────────────┘
+```
+
+**Integration Patterns:**
+
+**Catalog → Ordering (Anti-Corruption Layer)**
+- Ordering translates Catalog models to its own domain objects
+- Prevents breaking changes from cascading
+
+**Basket → Ordering (Event-Driven)**
+- Basket publishes events, Ordering subscribes
+- Loose coupling through RabbitMQ
+
+**Ordering → Payment (Synchronous Partnership)**
+- Direct API calls with shared payment concepts
+- Transactional consistency maintained
+
+**Discount → Ordering (Conformist)**
+- Ordering calls Discount API for price calculations
+- Read-only relationship with graceful degradation
+
+---
+
+## ☁️ Infrastructure & Deployment
+
+### Terraform Infrastructure
+
+**Repository**: [terraform-modules](https://github.com/RijoyP/terraform-modules)
+
+**Key Modules:**
+- **AKS**: Kubernetes cluster with node pools, autoscaling, Azure AD integration
+- **ACR**: Container registry with geo-replication and vulnerability scanning
+- **Networking**: VNet, subnets, NSGs, Application Gateway
+- **Databases**: PostgreSQL, SQL Server, Redis managed services
+- **Monitoring**: Log Analytics, Application Insights
+- **Security**: Key Vault, managed identities, RBAC
+
+**Deployment Stages:**
+
+```
+Terraform Validate → Plan → Apply (Dev) → Apply (Staging) → Apply (Prod)
+                                ↓              ↓               ↓
+                          Manual Approval Required for Prod
+```
+
+### Platform Components Deployment
+
+**Repository**: [GitOps/infrastructure](https://github.com/RijoyP/GitOps/tree/main/infrastructure)
+
+**Deployment Order:**
+
+```
+1. FluxCD System          → GitOps operator
+2. Ingress NGINX          → External traffic routing
+3. Cert Manager           → TLS certificate automation
+4. RabbitMQ              → Message broker
+5. Logging Stack          → Fluentd + Elasticsearch + Kibana (or PLG)
+6. Monitoring Stack       → Prometheus + Grafana + Alertmanager
+7. Tracing               → Jaeger with OpenTelemetry
+```
+
+---
+
+## 🚀 CI/CD Pipeline
+
+### Pipeline Architecture
+
+**Repository**: [CICD-Templates](https://github.com/RijoyP/CICD-Templates)
+
+### Application Pipeline Flow
+
+```
+┌──────────────┐
+│  Git Push    │
+└──────┬───────┘
+       │
+       ▼
+┌──────────────┐
+│  Restore &   │  → dotnet restore
+│  Build       │  → dotnet build
+└──────┬───────┘
+       │
+       ▼
+┌──────────────┐
+│  Unit &      │  → Run xUnit tests
+│  Integration │  → Code coverage check
+│  Tests       │
+└──────┬───────┘
+       │
+       ▼
+┌──────────────┐
+│  Security    │  → SAST scanning
+│  Scanning    │  → Dependency check
+└──────┬───────┘
+       │
+       ▼
+┌──────────────┐
+│  Docker      │  → Build image
+│  Build       │  → Scan with Trivy
+└──────┬───────┘
+       │
+       ▼
+┌──────────────┐
+│  Push to ACR │  → Tag with version & SHA
+└──────┬───────┘
+       │
+       ▼
+┌──────────────┐
+│  Update      │  → Update Kustomize overlay
+│  GitOps Repo │  → Commit new image tag
+└──────┬───────┘
+       │
+       ▼
+┌──────────────┐
+│  FluxCD      │  → Auto-sync to AKS
+│  Deployment  │
+└──────────────┘
+```
+
+**Pipeline Files**: [eShopMicroservices/.pipeline](https://github.com/RijoyP/eShopMicroservices/tree/main/.pipeline)
+
+### Automated Profile Generation
+
+**Script**: [generate-profiles.ps1](https://github.com/RijoyP/CICD-Templates/generate-profiles.ps1)
+
+Automatically generates pipeline configurations for each microservice and environment:
+
+- Scans service directory structure
+- Creates dev/staging/prod pipeline files
+- Injects service-specific variables
+- Validates generated YAML
+- Reduces setup time from hours to minutes
+
+---
+
+## 🔄 GitOps with FluxCD
+
+### Repository Structure
+
+**Repository**: [GitOps](https://github.com/RijoyP/GitOps)
+
+```
+GitOps/
+├── infrastructure/              # Platform components
+│   ├── base/
+│   ├── overlays/
+│   │   ├── dev/
+│   │   ├── staging/
+│   │   └── production/
+│   ├── logging/                # Fluentd, Elasticsearch, Kibana
+│   ├── tracing/                # Jaeger
+│   ├── monitoring/             # Prometheus, Grafana
+│   └── messaging/              # RabbitMQ
+│
+└── apps/                       # Microservice deployments
+    ├── base/
+    │   ├── catalog-api/
+    │   ├── basket-api/
+    │   ├── discount-api/
+    │   └── ordering-api/
+    └── overlays/
+        ├── dev/
+        ├── staging/
+        └── production/
+```
+
+### FluxCD Workflow
+
+```
+┌──────────────────────────────────────────────────────┐
+│                  FluxCD Reconciliation Loop          │
+│                                                      │
+│  Git Commit (New Image Tag)                         │
+│         ↓                                           │
+│  Source Controller (Detects Change)                 │
+│         ↓                                           │
+│  Kustomize Controller (Builds Manifests)            │
+│         ↓                                           │
+│  Apply to AKS Cluster                               │
+│         ↓                                           │
+│  Health Check & Validation                          │
+│         ↓                                           │
+│  Notification (Teams/Slack)                         │
+│                                                      │
+│  ◄────── Continuous Reconciliation (1-5 min) ───────┤
+└──────────────────────────────────────────────────────┘
+```
+
+**Key Features:**
+- **Drift Detection**: Auto-corrects manual changes back to Git state
+- **Progressive Delivery**: Canary deployments with Flagger
+- **Automated Rollback**: Reverts on health check failures
+- **Multi-Environment**: Separate overlays for dev/staging/prod
+
+### Helm Integration
+
+**Repository**: [helm-templates](https://github.com/RijoyP/helm-templates)
+
+Boilerplate Helm chart for consistent microservice deployments:
+- Deployment, Service, Ingress templates
+- ConfigMap and Secret management
+- HPA (Horizontal Pod Autoscaling)
+- ServiceMonitor for Prometheus
+- PodDisruptionBudget
+
+---
+
+## 📊 Observability Stack
+
+### Logging
+
+**Stack Options:**
+
+**ELK Stack**: Fluentd → Elasticsearch → Kibana
+
+**PLG Stack**: Promtail → Loki → Grafana
+
+**Capabilities:**
+- Centralized log aggregation from all services
+- Full-text search and filtering
+- Pre-built dashboards for error tracking
+- Log retention policies (dev: 7d, staging: 30d, prod: 90d)
+- Correlation with trace IDs
+
+**Deployment**: [GitOps/infrastructure/logging](https://github.com/RijoyP/GitOps/tree/main/infrastructure/logging)
+
+---
+
+### Tracing
+
+**Component**: Jaeger with OpenTelemetry
+
+**Features:**
+- Distributed trace tracking across all microservices
+- Automatic instrumentation for HTTP, SQL, RabbitMQ
+- Latency analysis and bottleneck identification
+- Service dependency mapping
+- Error tracing and root cause analysis
+
+**Deployment**: [GitOps/infrastructure/tracing](https://github.com/RijoyP/GitOps/tree/main/infrastructure/tracing)
+
+---
+
+### Monitoring
+
+**Stack**: Prometheus + Grafana + Alertmanager
+
+**Metrics Collected:**
+- Application metrics (request rates, latencies, errors)
+- Infrastructure metrics (CPU, memory, disk, network)
+- Database metrics (connections, query performance)
+- RabbitMQ metrics (queue depth, message rates)
+- Custom business metrics
+
+**Features:**
+- Real-time dashboards
+- Alert rules for SLOs
+- Multi-environment views
+- Historical trend analysis
+
+**Deployment**: [GitOps/infrastructure/monitoring](https://github.com/RijoyP/GitOps/tree/main/infrastructure/monitoring)
+
+---
+
+### Messaging
+
+**Component**: RabbitMQ
+
+**Features:**
+- Event-driven communication between services
+- Durable queues for reliable message delivery
+- Dead letter queues for failed messages
+- Message tracing and monitoring
+- High availability clustering
+
+**Deployment**: [GitOps/infrastructure/messaging](https://github.com/RijoyP/GitOps/tree/main/infrastructure/messaging)
+
+---
+
+## 🔗 Repository Links
+
+| Repository | Purpose |
+|------------|---------|
+| [eShopMicroservices](https://github.com/RijoyP/eShopMicroservices) | Microservices source code |
+| [GitOps](https://github.com/RijoyP/GitOps) | Kubernetes manifests and FluxCD configs |
+| [terraform-modules](https://github.com/RijoyP/terraform-modules) | Infrastructure as Code modules |
+| [CICD-Templates](https://github.com/RijoyP/CICD-Templates) | Reusable pipeline templates |
+| [helm-templates](https://github.com/RijoyP/helm-templates) | Helm chart boilerplate |
+
+---
+
+## 🎯 Key Architectural Patterns
+
+- **Microservices Architecture**: Independent, loosely coupled services
+- **Event-Driven Architecture**: Asynchronous communication via RabbitMQ
+- **API Gateway Pattern**: Azure Application Gateway with Azure AD authentication
+- **Database per Service**: Each service owns its data
+- **CQRS**: Command-Query separation in Ordering service
+- **Domain-Driven Design**: Rich domain model in Ordering service
+- **GitOps**: Declarative infrastructure and deployments
+- **Infrastructure as Code**: Terraform for all Azure resources
+
+---
+
+## 📈 System Characteristics
+
+**Scalability**: Horizontal scaling through Kubernetes HPA, independent service scaling
+
+**Resilience**: Circuit breakers, retry policies, health checks, automated recovery
+
+**Security**: Azure AD authentication, managed identities, Key Vault integration, network policies
+
+**Observability**: Comprehensive logging, tracing, and monitoring across all layers
+
+**Automation**: Fully automated CI/CD pipelines, GitOps-driven deployments
+
+**Compliance**: Audit trails, encryption at rest and in transit, RBAC
+
+---
+
+## 🚀 Deployment Summary
+
+1. **Infrastructure**: Terraform provisions Azure resources (AKS, ACR, databases)
+2. **Platform**: FluxCD deploys infrastructure components (logging, monitoring, messaging)
+3. **Applications**: CI/CD builds images, updates GitOps repo, FluxCD auto-deploys to AKS
+4. **Monitoring**: Observability stack provides full system visibility
+
+**All deployments are automated, version-controlled, and auditable through Git.**
+
+---
+
+## 📸 How to Use This README
+
+1. **Copy the entire content** (Ctrl+A, Ctrl+C)
+2. **Create a new README.md file** in your repository root
+3. **Paste the content** (Ctrl+V)
+4. **Commit and push** to your repository
+5. The ASCII diagram will render properly in GitHub, GitLab, and other markdown viewers
+
+---
+
+**Built with ❤️ using .NET 8, Azure, Kubernetes, and modern DevOps practices**
 
 
