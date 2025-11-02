@@ -47,7 +47,7 @@ eShop Microservices is a production-grade distributed e-commerce system demonstr
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────┐
-│                          CLIENT LAYER                                    │
+│                          CLIENT LAYER                                   │
 │                     ┌──────────────────────┐                            │
 │                     │   Shopping.Web       │                            │
 │                     │   (ASP.NET Core)     │                            │
@@ -56,77 +56,77 @@ eShop Microservices is a production-grade distributed e-commerce system demonstr
                                  │ HTTPS
                                  ▼
 ┌─────────────────────────────────────────────────────────────────────────┐
-│                    API GATEWAY LAYER                                     │
-│         ┌────────────────────────────────────────────────┐             │
-│         │    Azure Application Gateway                   │             │
-│         │  + Web Application Firewall (WAF)              │             │
-│         │  + Azure AD Authentication                     │             │
-│         │  + SSL/TLS Termination                         │             │
-│         │  + URL Routing & Path-based Routing            │             │
-│         │  + Load Balancing                              │             │
-│         └──────┬─────────┬─────────┬─────────────────────┘             │
-└────────────────┼─────────┼─────────┼─────────────────────────────────────┘
+│                    API GATEWAY LAYER                                    │
+│         ┌────────────────────────────────────────────────┐              │
+│         │    Azure Application Gateway                   │              │
+│         │  + Web Application Firewall (WAF)              │              │
+│         │  + Azure AD Authentication                     │              │
+│         │  + SSL/TLS Termination                         │              │
+│         │  + URL Routing & Path-based Routing            │              │
+│         │  + Load Balancing                              │              │
+│         └──────┬─────────┬─────────┬─────────────────────┘              │
+└────────────────┼─────────┼─────────┼────────────────────────────────────┘
                  │         │         │
         ┌────────┼─────────┼─────────┼─────────────┐
         │        │         │         │             │
-        ▼        ▼         ▼         ▼             │
-┌──────────────────────────────────────────────────┼────────────────────┐
-│  MICROSERVICES LAYER                             │                     │
-│  ┌──────────┐  ┌──────────┐  ┌──────────┐  ┌────────▼──────┐        │
-│  │ Catalog  │  │ Basket   │  │ Discount │  │   Ordering    │        │
-│  │   API    │  │   API    │  │   API    │  │     API       │        │
-│  └────┬─────┘  └────┬─────┘  └────┬─────┘  └────────┬──────┘        │
-│       │             │              │                  │                │
-│       ▼             ▼              ▼                  ▼                │
-│  ┌────────┐    ┌────────┐    ┌────────┐        ┌──────────┐         │
-│  │Postgre │    │Postgre │    │ SQLite │        │   SQL    │         │
-│  │  SQL   │    │SQL+Redis    │        │        │  Server  │         │
-│  └────────┘    └────────┘    └────────┘        └──────────┘         │
-└─────────────────────────────┬──────────────────────────────────────────┘
+        ▼        ▼         ▼         ▼             ▼
+┌──────────────────────────────────────────────────────────────────────┐
+│  MICROSERVICES LAYER                                                 │
+│  ┌──────────┐  ┌──────────┐  ┌──────────┐  ┌──────────────┐          │
+│  │ Catalog  │  │ Basket   │  │ Discount │  │   Ordering   │          │
+│  │   API    │  │   API    │  │   API    │  │     API      │          │
+│  └────┬─────┘  └────┬─────┘  └────┬─────┘  └────────┬─────┘          │
+│       │             │              │                  │              │
+│       ▼             ▼              ▼                  ▼              │
+│  ┌────────┐    ┌────────┐    ┌────────┐        ┌──────────┐          │
+│  │Postgre │    │Postgre │    │ SQLite │        │   SQL    │          │
+│  │  SQL   │    │SQL+Redis    │        │        │  Server  │          │
+│  └────────┘    └────────┘    └────────┘        └──────────┘          │
+└─────────────────────────────┬────────────────────────────────────────┘
                               │
                               ▼
 ┌─────────────────────────────────────────────────────────────────────────┐
-│                      MESSAGING LAYER                                     │
+│                      MESSAGING LAYER                                    │
 │                  ┌────────────────────────┐                             │
 │                  │      RabbitMQ          │                             │
 │                  │   Event-Driven Bus     │                             │
 │                  └────────────────────────┘                             │
 └─────────────────────────────────────────────────────────────────────────┘
                               ▼
-┌─────────────────────────────────────────────────────────────────────────┐
-│                    AZURE KUBERNETES SERVICE (AKS)                        │
+┌────────────────────────────────────────────────────────────────────────┐
+│                    AZURE KUBERNETES SERVICE (AKS)                      │
 │  ┌────────────────────────────────────────────────────────────┐        │
 │  │  Ingress Controller │ Service Mesh │ Azure Key Vault       │        │
 │  └────────────────────────────────────────────────────────────┘        │
-└─────────────────────────┬───────────────────────────────────────────────┘
+└─────────────────────────┬──────────────────────────────────────────────┘
                           │
                           │ GitOps Sync
                           ▼
 ┌─────────────────────────────────────────────────────────────────────────┐
-│                         FLUXCD GITOPS                                    │
-│  ┌──────────────────────────────────────────────────────────┐          │
+│                         FLUXCD GITOPS                                   │
+│  ┌──────────────────────────────────────────────────────────┐           │
 │  │  Source Controller → Kustomize Controller → Apply         │          │
-│  └────────────────┬─────────────────────────────────────────┘          │
+│  └────────────────┬─────────────────────────────────────────┘           │
 │                   │ Git Sync (1-5 min)                                  │
-│  ┌────────────────▼─────────────────────────────────────────┐          │
+│  ┌────────────────▼─────────────────────────────────────────┐           │
 │  │  GitOps Repository                                        │          │
 │  │    /infrastructure  → Platform components                 │          │
 │  │    /apps           → Application manifests                │          │
-│  └──────────────────────────────────────────────────────────┘          │
+│  └──────────────────────────────────────────────────────────┘           │ 
 └─────────────────────────────────────────────────────────────────────────┘
 
 ┌─────────────────────────────────────────────────────────────────────────┐
-│                    OBSERVABILITY STACK                                   │
-│  ┌───────────┐  ┌───────────┐  ┌───────────┐  ┌──────────┐           │
-│  │  Logging  │  │  Tracing  │  │Monitoring │  │ Alerting │           │
-│  │ (ELK/PLG) │  │  (Jaeger) │  │(Prometheus│  │ (Grafana)│           │
-│  └───────────┘  └───────────┘  └───────────┘  └──────────┘           │
+│                    OBSERVABILITY STACK                                  │
+│  ┌───────────┐  ┌───────────┐  ┌───────────┐  ┌──────────┐              │
+│  │  Logging  │  │  Tracing  │  │Monitoring │  │ Alerting │              │
+│  │ (ELK/PLG) │  │  (Jaeger) │  │(Prometheus│  │ (Grafana)│              │
+│  └───────────┘  └───────────┘  └───────────┘  └──────────┘              │
 └─────────────────────────────────────────────────────────────────────────┘
 
 ┌─────────────────────────────────────────────────────────────────────────┐
-│                         CI/CD PIPELINE                                   │
-│  Code Push → Build & Test → Docker Build → ACR Push → Update GitOps    │
-│                            → FluxCD Auto Deploy                          │
+│                         CI/CD PIPELINE                                  │
+│  Code Push → Build & Test → Docker Build → ACR Push → Update GitOps     │
+│                            → FluxCD Auto Deploy                         │
 └─────────────────────────────────────────────────────────────────────────┘
 ```
 
@@ -579,18 +579,6 @@ Boilerplate Helm chart for consistent microservice deployments:
 4. **Monitoring**: Observability stack provides full system visibility
 
 **All deployments are automated, version-controlled, and auditable through Git.**
-
----
-
-## 📸 How to Use This README
-
-1. **Copy the entire content** (Ctrl+A, Ctrl+C)
-2. **Create a new README.md file** in your repository root
-3. **Paste the content** (Ctrl+V)
-4. **Commit and push** to your repository
-5. The ASCII diagram will render properly in GitHub, GitLab, and other markdown viewers
-
----
 
 **Built with ❤️ using .NET 8, Azure, Kubernetes, and modern DevOps practices**
 
