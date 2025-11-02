@@ -8,13 +8,6 @@ Summary
 Mermaid: high-level diagram
 Unable to render rich display
 
-Parse error on line 8:
-... API[API Gateway (YARP / Nginx)] Cl
----------------------^
-Expecting 'SQE', 'DOUBLECIRCLEEND', 'PE', '-)', 'STADIUMEND', 'SUBROUTINEEND', 'PIPE', 'CYLINDEREND', 'DIAMOND_STOP', 'TAGEND', 'TRAPEND', 'INVTRAPEND', 'UNICODE_TEXT', 'TEXT', 'TAGSTART', got 'PS'
-
-For more information, see https://docs.github.com/get-started/writing-on-github/working-with-advanced-formatting/creating-diagrams#creating-mermaid-diagrams
-
 Services — purpose, importance, and key integrations
 
 - Basket API
