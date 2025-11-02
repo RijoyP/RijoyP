@@ -286,7 +286,7 @@ Terraform Validate → Plan → Apply (Dev) → Apply (Staging) → Apply (Prod)
 
 ### Platform Components Deployment
 
-**Repository**: [GitOps/infrastructure](https://github.com/RijoyP/GitOps/tree/main/infrastructure)
+**Repository**: [GitOps/infrastructure](https://github.com/RijoyP/GitOps/tree/main/eShopMicroService/infrastructure)
 
 **Deployment Order:**
 
