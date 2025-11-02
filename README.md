@@ -6,7 +6,7 @@ Summary
 - CI builds images, pushes to ACR, and updates the GitOps repo; Flux reconciles cluster state.
 
 Quick repo pointers
-- Services code: c:\Learn\github\eShopMicroServices\Services\*
+- Services code: https://github.com/RijoyP/eShopMicroservices
 - GitOps manifests: https://github.com/RijoyP/GitOps
 - Terraform modules: https://github.com/RijoyP/terraform-modules
 - CICD templates & generator: https://github.com/RijoyP/-CICD-Templates 
