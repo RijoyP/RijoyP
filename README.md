@@ -237,20 +237,20 @@ Core domain concepts:
 
 ```
 ┌─────────────────────────────────────────────────────────┐
-│                  CONTEXT MAP                             │
-│                                                          │
-│  Catalog Context                                         │
-│       │                                                  │
+│                  CONTEXT MAP                            │
+│                                                         │
+│  Catalog Context                                        │
+│       │                                                 │
 │       │ (ACL)                                           │
-│       ▼                                                  │
+│       ▼                                                 │
 │  Ordering Context ◄──(Customer/Supplier)── Basket       │
-│       │                                                  │
+│       │                                                 │
 │       │ (Partnership)                                   │
-│       ▼                                                  │
-│  Payment Context                                         │
-│                                                          │
+│       ▼                                                 │
+│  Payment Context                                        │
+│                                                         │
 │  Discount Context ──(Conformist)──► Ordering            │
-│                                                          │
+│                                                         │
 └─────────────────────────────────────────────────────────┘
 ```
 
