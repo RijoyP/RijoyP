@@ -9,7 +9,7 @@ Quick repo pointers
 - Services code: https://github.com/RijoyP/eShopMicroservices
 - GitOps manifests: https://github.com/RijoyP/GitOps
 - Terraform modules: https://github.com/RijoyP/terraform-modules
-- CICD templates & generator: https://github.com/RijoyP/-CICD-Templates 
+- CICD templates & generator: https://github.com/RijoyP/CICD-Templates 
 - Helm boilerplate chart: https://github.com/RijoyP/helm-templates
 
 Services — purpose, importance, and key integrations
