@@ -358,11 +358,11 @@ Terraform Validate → Plan → Apply (Dev) → Apply (Staging) → Apply (Prod)
 └──────────────┘
 ```
 
-**Pipeline Files**: [eShopMicroservices/.pipeline](https://github.com/RijoyP/eShopMicroservices/tree/main/.pipeline)
+**Pipeline Files**: [eShopMicroservices/.pipeline](https://github.com/RijoyP/eShopMicroservices/tree/main/.pipelines)
 
 ### Automated Profile Generation
 
-**Script**: [generate-profiles.ps1](https://github.com/RijoyP/CICD-Templates/generate-profiles.ps1)
+**Script**: [generate-profiles.ps1](https://github.com/RijoyP/CICD-Templates/blob/main/applications/scripts/generate-profiles.ps1)
 
 Automatically generates pipeline configurations for each microservice and environment:
 
@@ -411,19 +411,19 @@ GitOps/
 ┌──────────────────────────────────────────────────────┐
 │                  FluxCD Reconciliation Loop          │
 │                                                      │
-│  Git Commit (New Image Tag)                         │
-│         ↓                                           │
-│  Source Controller (Detects Change)                 │
-│         ↓                                           │
-│  Kustomize Controller (Builds Manifests)            │
-│         ↓                                           │
-│  Apply to AKS Cluster                               │
-│         ↓                                           │
-│  Health Check & Validation                          │
-│         ↓                                           │
-│  Notification (Teams/Slack)                         │
+│  Git Commit (New Image Tag)                          │
+│         ↓                                            │ 
+│  Source Controller (Detects Change)                  │
+│         ↓                                            │
+│  Kustomize Controller (Builds Manifests)             │
+│         ↓                                            │
+│  Apply to AKS Cluster                                │
+│         ↓                                            │
+│  Health Check & Validation                           │
+│         ↓                                            │
+│  Notification (Teams/Slack)                          │
 │                                                      │
-│  ◄────── Continuous Reconciliation (1-5 min) ───────┤
+│  ◄────── Continuous Reconciliation (1-5 min)  ───────┤
 └──────────────────────────────────────────────────────┘
 ```
 
@@ -463,7 +463,7 @@ Boilerplate Helm chart for consistent microservice deployments:
 - Log retention policies (dev: 7d, staging: 30d, prod: 90d)
 - Correlation with trace IDs
 
-**Deployment**: [GitOps/infrastructure/logging](https://github.com/RijoyP/GitOps/tree/main/infrastructure/logging)
+**Deployment**: [GitOps/infrastructure/logging](https://github.com/RijoyP/GitOps/tree/main/eShopMicroService/infrastructure/logging)
 
 ---
 
@@ -478,7 +478,7 @@ Boilerplate Helm chart for consistent microservice deployments:
 - Service dependency mapping
 - Error tracing and root cause analysis
 
-**Deployment**: [GitOps/infrastructure/tracing](https://github.com/RijoyP/GitOps/tree/main/infrastructure/tracing)
+**Deployment**: [GitOps/infrastructure/tracing](https://github.com/RijoyP/GitOps/tree/main/eShopMicroService/infrastructure/tracing)
 
 ---
 
@@ -499,7 +499,7 @@ Boilerplate Helm chart for consistent microservice deployments:
 - Multi-environment views
 - Historical trend analysis
 
-**Deployment**: [GitOps/infrastructure/monitoring](https://github.com/RijoyP/GitOps/tree/main/infrastructure/monitoring)
+**Deployment**: [GitOps/infrastructure/monitoring](https://github.com/RijoyP/GitOps/tree/main/eShopMicroService/infrastructure/monitoring)
 
 ---
 
@@ -514,7 +514,7 @@ Boilerplate Helm chart for consistent microservice deployments:
 - Message tracing and monitoring
 - High availability clustering
 
-**Deployment**: [GitOps/infrastructure/messaging](https://github.com/RijoyP/GitOps/tree/main/infrastructure/messaging)
+**Deployment**: [GitOps/infrastructure/messaging](https://github.com/RijoyP/GitOps/tree/main/eShopMicroService/infrastructure/messaging/)
 
 ---
 
