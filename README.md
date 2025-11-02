@@ -6,45 +6,14 @@ Summary
 - CI builds images, pushes to ACR, and updates the GitOps repo; Flux reconciles cluster state.
 
 Mermaid: high-level diagram
-```mermaid
-graph TB
-  subgraph Clients
-    Web[Web App]
-    Mobile[Mobile App]
-    Admin[Admin UI]
-  end
+Unable to render rich display
 
-  API[API Gateway (YARP / Nginx)]
-  Clients --> API
+Parse error on line 8:
+... API[API Gateway (YARP / Nginx)] Cl
+---------------------^
+Expecting 'SQE', 'DOUBLECIRCLEEND', 'PE', '-)', 'STADIUMEND', 'SUBROUTINEEND', 'PIPE', 'CYLINDEREND', 'DIAMOND_STOP', 'TAGEND', 'TRAPEND', 'INVTRAPEND', 'UNICODE_TEXT', 'TEXT', 'TAGSTART', got 'PS'
 
-  subgraph AKS[AKS Cluster]
-    API --> Basket[Basket API]
-    API --> Catalog[Catalog API]
-    API --> Discount[Discount API]
-    API --> Order[Order API]
-
-    Basket --> Redis[(Redis Cache)]
-    Basket --> RabbitMQ[(RabbitMQ)]
-    Order --> RabbitMQ
-    Catalog --> SQLServer[(SQL Server)]
-    Order --> SQLServer
-    Discount --> Postgres[(PostgreSQL)]
-
-    Observability[(Logging / Tracing / Metrics)]
-    Observability --> Prometheus[(Prometheus)]
-    Observability --> Jaeger[(Jaeger)]
-    Observability --> EFK[(Elasticsearch / Kibana)]
-  end
-
-  CI[CI/CD (CICD-Templates)]
-  CI --> ACR[(Azure Container Registry)]
-  ACR --> AKS
-  CI --> GitOps[(Flux GitOps repo)]
-  GitOps --> AKS
-
-  Infra[(Terraform modules)]
-  Infra --> Azure[(Azure resources: AKS, ACR, KeyVault, Networking...)]
-```
+For more information, see https://docs.github.com/get-started/writing-on-github/working-with-advanced-formatting/creating-diagrams#creating-mermaid-diagrams
 
 Services — purpose, importance, and key integrations
 
