@@ -582,8 +582,9 @@ Ingress rules
 Health check settings
 
 
+**Deployment Flow:**
 
-Deployment Flow:
+```
 1. CI Pipeline completes
    └─> Builds Docker image: basket-api:v1.0.50
    └─> Pushes to ACR
@@ -619,6 +620,8 @@ Deployment Flow:
 
 6. FluxCD Notification
    └─> Posts success message to Teams/Slack
+```
+
 Key Benefits:
 
 Single Helm Chart: One boilerplate chart used for all services
