@@ -512,13 +512,40 @@ Terraform Validate → Plan → Apply (Dev) → Apply (Staging) → Apply (Prod)
 
 **Script**: [generate-profiles.ps1](https://github.com/RijoyP/CICD-Templates/blob/main/applications/scripts/generate-profiles.ps1)
 
-Automatically generates pipeline configurations for each microservice and environment:
+Automated Profile Generation
+Script: generate-profiles.ps1
+Purpose: Automatically generates Azure DevOps pipeline YAML files for different techinical stack which will help the developement team can use easily.
+How It Works:
 
-- Scans service directory structure
-- Creates dev/staging/prod pipeline files
-- Injects service-specific variables
-- Validates generated YAML
-- Reduces setup time from hours to minutes
+Scans Services directory to discover all microservices
+Loads pipeline templates and environment configurations
+For each technical stack × task combination, generates complete pipeline YAML
+Validates generated files for syntax and schema
+Outputs to applications/profiles/ directory
+
+Generated Profiles: CICD-Templates/applications/profiles
+Sample Generated Files:
+
+| Profile | Build | Linting | Unit Tests | SCA | Publish | Parameters |
+|---------|-------|---------|------------|-----|--------|------------|
+| dotnet/dotnet-build-linting-none-all-all.yaml | dotnet/build-dotnet.yaml | dotnet/linting-dotnet.yaml | none/unit-tests-none.yaml | sca/sca-all.yaml | publish/publish-all.yaml | vmImage, poolName, applicationFolder, dotnetVersion, sonarQubeProjectKey, sonarQubeProjectName, sonarQubeServiceConnection, trivySeverity, trivyFormat, serviceConnection, dockerfilePath, buildArgs, dockerContext, trivyExitCode, trivyIgnoreUnfixed, trivyTimeout, acrRegistry, imageName, imageTag |
+| dotnet/dotnet-build-linting-none-all-build-image.yaml | publish/publish-build-image.yaml | dotnet/linting-dotnet.yaml | none/unit-tests-none.yaml | sca/sca-all.yaml | - | vmImage, poolName, applicationFolder, dotnetVersion, sonarQubeProjectKey, sonarQubeProjectName, sonarQubeServiceConnection, trivySeverity, trivyFormat, dockerfilePath, imageName, imageTag, buildArgs, dockerContext |
+| dotnet/dotnet-build-linting-none-all-none.yaml | dotnet/build-dotnet.yaml | dotnet/linting-dotnet.yaml | none/unit-tests-none.yaml | sca/sca-all.yaml | publish/publish-none.yaml | vmImage, poolName, applicationFolder, dotnetVersion, sonarQubeProjectKey, sonarQubeProjectName, sonarQubeServiceConnection, trivySeverity, trivyFormat |
+| dotnet/dotnet-build-linting-none-all-push-acr.yaml | dotnet/build-dotnet.yaml | dotnet/linting-dotnet.yaml | none/unit-tests-none.yaml | sca/sca-all.yaml | publish/publish-push-acr.yaml | vmImage, poolName, applicationFolder, dotnetVersion, sonarQubeProjectKey, sonarQubeProjectName, sonarQubeServiceConnection, trivySeverity, trivyFormat, serviceConnection, dockerfilePath, dockerContext, buildArgs, acrRegistry, imageName, imageTag |
+| dotnet/dotnet-build-linting-none-all-scan-image.yaml | dotnet/build-dotnet.yaml | dotnet/linting-dotnet.yaml | none/unit-tests-none.yaml | sca/sca-all.yaml | publish/publish-scan-image.yaml | vmImage, poolName, applicationFolder, dotnetVersion, sonarQubeProjectKey, sonarQubeProjectName, sonarQubeServiceConnection, trivySeverity, trivyFormat, imageName, imageTag, trivyExitCode, trivyIgnoreUnfixed, trivyTimeout |
+| dotnet/dotnet-build-linting-none-none-all.yaml | dotnet/build-dotnet.yaml | dotnet/linting-dotnet.yaml | none/unit-tests-none.yaml | sca/sca-none.yaml | publish/publish-all.yaml | vmImage, poolName, applicationFolder, dotnetVersion, serviceConnection, dockerfilePath, buildArgs, dockerContext, trivySeverity, trivyExitCode, trivyIgnoreUnfixed, trivyTimeout, acrRegistry, imageName, imageTag |
+| dotnet/dotnet-build-linting-none-none-build-image.yaml | publish/publish-build-image.yaml | dotnet/linting-dotnet.yaml | none/unit-tests-none.yaml | sca/sca-none.yaml | - | vmImage, poolName, applicationFolder, dotnetVersion, dockerfilePath, imageName, imageTag, buildArgs, dockerContext |
+| dotnet/dotnet-build-linting-none-none-none.yaml | dotnet/build-dotnet.yaml | dotnet/linting-dotnet.yaml | none/unit-tests-none.yaml | sca/sca-none.yaml | publish/publish-none.yaml | vmImage, poolName, applicationFolder, dotnetVersion |
+| dotnet/dotnet-build-linting-none-none-push-acr.yaml | dotnet/build-dotnet.yaml | dotnet/linting-dotnet.yaml | none/unit-tests-none.yaml | sca/sca-none.yaml | publish/publish-push-acr.yaml | vmImage, poolName, applicationFolder, dotnetVersion, serviceConnection, dockerfilePath, dockerContext, buildArgs, acrRegistry, imageName, imageTag |
+| dotnet/dotnet-build-linting-none-none-scan-image.yaml | dotnet/build-dotnet.yaml | dotnet/linting-dotnet.yaml | none/unit-tests-none.yaml | sca/sca-none.yaml | publish/publish-scan-image.yaml | vmImage, poolName, applicationFolder, dotnetVersion, imageName, imageTag, trivySeverity, trivyExitCode, trivyIgnoreUnfixed, trivyTimeout |
+| dotnet/dotnet-build-linting-none-sonarqube-all.yaml | dotnet/build-dotnet.yaml | dotnet/linting-dotnet.yaml | none/unit-tests-none.yaml | sca/sca-sonarqube.yaml | publish/publish-all.yaml | vmImage, poolName, applicationFolder, dotnetVersion, sonarQubeProjectKey, sonarQubeProjectName, sonarQubeServiceConnection, serviceConnection, dockerfilePath, buildArgs, dockerContext, trivySeverity, trivyExitCode, trivyIgnoreUnfixed, trivyTimeout, acrRegistry, imageName, imageTag |
+| dotnet/dotnet-build-linting-none-sonarqube-build-image.yaml | publish/publish-build-image.yaml | dotnet/linting-dotnet.yaml | none/unit-tests-none.yaml | sca/sca-sonarqube.yaml | - | vmImage, poolName, applicationFolder, dotnetVersion, sonarQubeProjectKey, sonarQubeProjectName, sonarQubeServiceConnection, dockerfilePath, imageName, imageTag, buildArgs, dockerContext |
+| dotnet/dotnet-build-linting-none-sonarqube-none.yaml | dotnet/build-dotnet.yaml | dotnet/linting-dotnet.yaml | none/unit-tests-none.yaml | sca/sca-sonarqube.yaml | publish/publish-none.yaml | vmImage, poolName, applicationFolder, dotnetVersion, sonarQubeProjectKey, sonarQubeProjectName, sonarQubeServiceConnection |
+| dotnet/dotnet-build-linting-none-sonarqube-push-acr.yaml | dotnet/build-dotnet.yaml | dotnet/linting-dotnet.yaml | none/unit-tests-none.yaml | sca/sca-sonarqube.yaml | publish/publish-push-acr.yaml | vmImage, poolName, applicationFolder, dotnetVersion, sonarQubeProjectKey, sonarQubeProjectName, sonarQubeServiceConnection, serviceConnection, dockerfilePath, dockerContext, buildArgs, acrRegistry, imageName, imageTag |
+| dotnet/dotnet-build-linting-none-sonarqube-scan-image.yaml | dotnet/build-dotnet.yaml | dotnet/linting-dotnet.yaml | none/unit-tests-none.yaml | sca/sca-sonarqube.yaml | publish/publish-scan-image.yaml | vmImage, poolName, applicationFolder, dotnetVersion, sonarQubeProjectKey, sonarQubeProjectName, sonarQubeServiceConnection, imageName, imageTag, trivySeverity, trivyExitCode, trivyIgnoreUnfixed, trivyTimeout |
+| dotnet/dotnet-build-linting-none-trivy-all.yaml | dotnet/build-dotnet.yaml | dotnet/linting-dotnet.yaml | none/unit-tests-none.yaml | sca/sca-trivy.yaml | publish/publish-all.yaml | vmImage, poolName, applicationFolder, dotnetVersion, trivySeverity, trivyFormat, serviceConnection, dockerfilePath, buildArgs, dockerContext, trivyExitCode, trivyIgnoreUnfixed, trivyTimeout, acrRegistry, imageName, imageTag |
+| dotnet/dotnet-build-linting-none-trivy-build-image.yaml | publish/publish-build-image.yaml | dotnet/linting-dotnet.yaml | none/unit-tests-none.yaml | sca/sca-trivy.yaml | - | vmImage, poolName, applicationFolder, dotnetVersion, trivySeverity, trivyFormat, dockerfilePath, imageName, imageTag, buildArgs, dockerContext |
+
 
 ---
 
