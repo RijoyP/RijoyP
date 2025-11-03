@@ -436,10 +436,10 @@ Terraform Validate → Plan → Apply (Dev) → Apply (Staging) → Apply (Prod)
 1. FluxCD System          → GitOps operator
 2. Ingress NGINX          → External traffic routing
 3. Cert Manager           → TLS certificate automation
-4. RabbitMQ              → Message broker
-5. Logging Stack          → Fluentd + Elasticsearch + Kibana (or PLG)
+4. RabbitMQ               → Message broker
+5. Logging Stack          → Elasticsearch + Kibana (or PLG)
 6. Monitoring Stack       → Prometheus + Grafana + Alertmanager
-7. Tracing               → Jaeger with OpenTelemetry
+7. Tracing                → Jaeger with OpenTelemetry
 ```
 
 ---
