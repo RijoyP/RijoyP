@@ -5,12 +5,15 @@ Summary
 - Deployed on AKS using Flux GitOps and Azure infrastructure provisioned via Terraform (CICD-Templates + terraform-modules).  
 - CI builds images, pushes to ACR, and updates the GitOps repo; Flux reconciles cluster state.
 
-Quick repo pointers
-- Services code: https://github.com/RijoyP/eShopMicroservices
-- GitOps manifests: https://github.com/RijoyP/GitOps
-- Terraform modules: https://github.com/RijoyP/terraform-modules
-- CICD templates & generator: https://github.com/RijoyP/CICD-Templates 
-- Helm boilerplate chart: https://github.com/RijoyP/helm-templates
+## 🔗 Repository Links
+
+| Repository | Purpose |
+|------------|---------|
+| [eShopMicroservices](https://github.com/RijoyP/eShopMicroservices) | Microservices source code |
+| [GitOps](https://github.com/RijoyP/GitOps) | Kubernetes manifests and FluxCD configs |
+| [terraform-modules](https://github.com/RijoyP/terraform-modules) | Infrastructure as Code modules |
+| [CICD-Templates](https://github.com/RijoyP/CICD-Templates) | Reusable pipeline templates |
+| [helm-templates](https://github.com/RijoyP/helm-templates) | Helm chart boilerplate |
 
 # eShop Microservices - High Level Design
 
