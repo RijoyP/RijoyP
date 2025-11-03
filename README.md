@@ -107,7 +107,8 @@ eShop Microservices is a production-grade distributed e-commerce system demonstr
 │                    OBSERVABILITY STACK                                  │
 │  ┌───────────┐  ┌───────────┐  ┌───────────┐  ┌──────────┐              │
 │  │  Logging  │  │  Tracing  │  │Monitoring │  │ Alerting │              │
-│  │ (ELK/PLG) │  │  (Jaeger) │  │(Prometheus│  │ (Grafana)│              │
+│  │  Elastic  │  │  Jaeger   │  │Prometheus │  │ Grafana  │              │
+│  │  Kibana   │  │  Zipkin   │  │Grafana    │  │          │              │ 
 │  └───────────┘  └───────────┘  └───────────┘  └──────────┘              │
 └─────────────────────────────────────────────────────────────────────────┘
 
@@ -529,14 +530,9 @@ Automatically generates pipeline configurations for each microservice and enviro
 
 ```
 GitOps/
-├── infrastructure/              # Platform components
-│   ├── base/
-│   ├── overlays/
-│   │   ├── dev/
-│   │   ├── staging/
-│   │   └── production/
-│   ├── logging/                # Fluentd, Elasticsearch, Kibana
-│   ├── tracing/                # Jaeger
+├── infrastructure/             # Platform components
+│   ├── logging/                # Elasticsearch, Kibana
+│   ├── tracing/                # Jaeger, Zipkin
 │   ├── monitoring/             # Prometheus, Grafana
 │   └── messaging/              # RabbitMQ
 │
