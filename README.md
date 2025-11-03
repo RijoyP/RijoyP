@@ -123,10 +123,11 @@ eShop Microservices is a production-grade distributed e-commerce system demonstr
 
 ## 🔧 Backend Services
 
-🏗️ Clean Architecture & CQRS
-Source Code: eShopMicroservices/Services
-Architecture Layers
+### Architecture Layers
+
 All microservices follow Clean Architecture principles with clear separation of concerns:
+
+```
 ┌──────────────────────────────────────────────────────┐
 │         API Layer (Carter - Minimal APIs)            │
 │  • HTTP Endpoints                                    │
@@ -148,26 +149,27 @@ All microservices follow Clean Architecture principles with clear separation of 
                      ▼
 ┌─────────────────────────────────────────────────────┐
 │            Domain Layer (DDD)                       │
-│  • Aggregates & Entities                            │
+│  • Aggregates & Entities                            │ 
 │  • Value Objects                                    │
 │  • Domain Events                                    │
 │  • Business Rules                                   │
 └────────────────────┬────────────────────────────────┘
                      ▼
-┌──────────────────────────────────────────────────────┐
-│         Infrastructure Layer                         │
-│  • Entity Framework Core (Traditional ORM)           │
-│  • Marten (Event Sourcing for Ordering)              │
-│  • PostgreSQL / SQL Server / SQLite                  │
-│  • Redis (Caching)                                   │
-│  • RabbitMQ (Messaging)                              │
-│  • gRPC (Inter-service communication)                │
-└──────────────────────────────────────────────────────┘
+┌─────────────────────────────────────────────────────┐
+│         Infrastructure Layer                        │
+│  • Entity Framework Core (Traditional ORM)          │
+│  • Marten (Event Sourcing for Ordering)             │
+│  • PostgreSQL / SQL Server / SQLite                 │
+│  • Redis (Caching)                                  │
+│  • RabbitMQ (Messaging)                             │
+│  • gRPC (Inter-service communication)               │
+└─────────────────────────────────────────────────────┘
 
         Cross-Cutting Concerns (Building Blocks)
 ┌──────────────────────────────────────────────────────┐
-│  OpenTelemetry | Serilog | Polly | FluentValidation  │
+│  OpenTelemetry | Serilog | Polly | FluentValidation  │ 
 └──────────────────────────────────────────────────────┘
+```
 
 ### Service Overview
 
@@ -305,29 +307,29 @@ Core domain concepts:
 - Ordering calls Discount API for price calculations
 - Read-only relationship with graceful degradation
 
-Technology Stack Explained
-Carter - Minimal API Endpoints
+**Technology Stack Explained**
+**Carter - Minimal API Endpoints**
 
 Lightweight alternative to traditional Controllers
 Functional endpoint definitions
 Clean, organized API routes
 Supports route grouping and modules
 
-MediatR - CQRS Implementation
+**MediatR - CQRS Implementation**
 
 Commands: Handle write operations (Create, Update, Delete)
 Queries: Handle read operations (Get, List, Search)
 Separates read and write concerns
 Pipeline behaviors for validation, logging, and performance tracking
 
-FluentValidation - Input Validation
+**FluentValidation - Input Validation**
 
 Strongly-typed validation rules
 Automatic validation in MediatR pipeline
 Clear error messages
 Reusable validation logic
 
-Marten - Event Sourcing (Ordering Service)
+**Marten - Event Sourcing (Ordering Service)**
 
 PostgreSQL as document database
 Event store for order history
@@ -335,7 +337,7 @@ Stores aggregates as JSON documents
 Optimistic concurrency control
 Event projections to read models
 
-Entity Framework Core - Traditional ORM
+**Entity Framework Core - Traditional ORM**
 
 Used in Catalog and Discount services
 Relational data access
@@ -343,7 +345,7 @@ LINQ query support
 Database migrations
 Change tracking
 
-Building Blocks - Shared Libraries
+**Building Blocks - Shared Libraries**
 Location: eShopMicroservices/BuildingBlocks/
 Reusable components shared across all microservices:
 
@@ -352,7 +354,7 @@ BuildingBlocks.Messaging: Domain events, integration events, MassTransit configu
 BuildingBlocks.Behaviors: Validation, logging, and performance pipeline behaviors
 BuildingBlocks.Exceptions: Custom domain exceptions
 
-Polly - Resilience & Retry Policies
+**Polly - Resilience & Retry Policies**
 
 Handles transient failures
 Retry policies with exponential backoff
@@ -360,7 +362,7 @@ Circuit breaker pattern
 Timeout policies
 Applied to HTTP clients and database operations
 
-OpenTelemetry - Distributed Tracing
+**OpenTelemetry - Distributed Tracing**
 
 End-to-end request tracing across all services
 Automatic instrumentation for HTTP, SQL, RabbitMQ
@@ -368,7 +370,7 @@ Exports traces to Jaeger
 Correlates logs, traces, and metrics
 Performance monitoring
 
-Serilog - Structured Logging
+**Serilog - Structured Logging**
 
 JSON-formatted logs
 Enriched with context (trace IDs, user IDs, etc.)
@@ -376,14 +378,14 @@ Centralized logging to Elasticsearch
 Queryable log data
 Different log levels per environment
 
-gRPC - Inter-Service Communication
+**gRPC - Inter-Service Communication**
 
 High-performance RPC framework
 Type-safe service contracts
 Used for synchronous service-to-service calls
 Example: Basket API calls Discount API via gRPC for real-time discount calculations
 
-CQRS Pattern in Action
+**CQRS Pattern in Action**
 Write Path (Commands):
 
 User submits request → API endpoint (Carter)
@@ -393,7 +395,7 @@ Command handler processes business logic
 Changes persisted to database
 Domain events published to RabbitMQ
 
-Read Path (Queries):
+**Read Path (Queries):**
 
 User requests data → API endpoint (Carter)
 Query created and sent through MediatR
@@ -401,7 +403,7 @@ Query handler retrieves data
 Data cached in Redis (if applicable)
 Response returned to user
 
-Benefits:
+**Benefits:**
 
 Optimized read and write models
 Independent scaling of reads vs writes
