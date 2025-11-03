@@ -64,12 +64,12 @@ eShop Microservices is a production-grade distributed e-commerce system demonstr
 │  │ Catalog  │  │ Basket   │  │ Discount │  │   Ordering   │          │
 │  │   API    │  │   API    │  │   API    │  │     API      │          │
 │  └────┬─────┘  └────┬─────┘  └────┬─────┘  └────────┬─────┘          │
-│       │             │              │                  │              │
-│       ▼             ▼              ▼                  ▼              │
-│  ┌────────┐    ┌────────┐    ┌────────┐        ┌──────────┐          │
-│  │Postgre │    │Postgre │    │ SQLite │        │   SQL    │          │
-│  │  SQL   │    │SQL+Redis    │        │        │  Server  │          │
-│  └────────┘    └────────┘    └────────┘        └──────────┘          │
+│       │             │             │                 │                │
+│       ▼             ▼             ▼                 ▼                │
+│  ┌────────┐    ┌─────────┐    ┌────────┐        ┌──────────┐          │
+│  │Postgre │    │Postgre  │    │ SQLite │        │   SQL    │          │
+│  │  SQL   │    │SQL+Redis│    │        │        │  Server  │          │
+│  └────────┘    └─────────┘    └────────┘        └──────────┘          │
 └─────────────────────────────┬────────────────────────────────────────┘
                               │
                               ▼
@@ -122,6 +122,52 @@ eShop Microservices is a production-grade distributed e-commerce system demonstr
 
 ## 🔧 Backend Services
 
+🏗️ Clean Architecture & CQRS
+Source Code: eShopMicroservices/Services
+Architecture Layers
+All microservices follow Clean Architecture principles with clear separation of concerns:
+┌──────────────────────────────────────────────────────┐
+│         API Layer (Carter - Minimal APIs)            │
+│  • HTTP Endpoints                                    │
+│  • Request/Response DTOs                             │
+│  • FluentValidation for input validation             │
+└────────────────────┬─────────────────────────────────┘
+                     ▼
+┌─────────────────────────────────────────────────────┐
+│       Application Layer (MediatR - CQRS)            │
+│  ┌──────────────┐        ┌──────────────┐           │
+│  │  Commands    │        │   Queries    │           │
+│  │(Write Model) │        │(Read Model)  │           │
+│  └──────┬───────┘        └──────┬───────┘           │
+│         │                       │                   │
+│         ▼                       ▼                   │
+│  Command Handlers        Query Handlers             │
+│  + Business Logic        + Caching Logic            │
+└────────────────────┬────────────────────────────────┘
+                     ▼
+┌─────────────────────────────────────────────────────┐
+│            Domain Layer (DDD)                       │
+│  • Aggregates & Entities                            │
+│  • Value Objects                                    │
+│  • Domain Events                                    │
+│  • Business Rules                                   │
+└────────────────────┬────────────────────────────────┘
+                     ▼
+┌──────────────────────────────────────────────────────┐
+│         Infrastructure Layer                         │
+│  • Entity Framework Core (Traditional ORM)           │
+│  • Marten (Event Sourcing for Ordering)              │
+│  • PostgreSQL / SQL Server / SQLite                  │
+│  • Redis (Caching)                                   │
+│  • RabbitMQ (Messaging)                              │
+│  • gRPC (Inter-service communication)                │
+└──────────────────────────────────────────────────────┘
+
+        Cross-Cutting Concerns (Building Blocks)
+┌──────────────────────────────────────────────────────┐
+│  OpenTelemetry | Serilog | Polly | FluentValidation  │
+└──────────────────────────────────────────────────────┘
+
 ### Service Overview
 
 | Service | Database | Purpose | Key Features |
@@ -145,8 +191,6 @@ eShop Microservices is a production-grade distributed e-commerce system demonstr
 - Product and category management
 - Real-time inventory tracking
 - Search and filtering
-- Image management
-- Integration with Azure Blob Storage
 
 **Why PostgreSQL?** Complex queries, JSON support, full-text search, ACID compliance for inventory
 
@@ -259,6 +303,109 @@ Core domain concepts:
 **Discount → Ordering (Conformist)**
 - Ordering calls Discount API for price calculations
 - Read-only relationship with graceful degradation
+
+Technology Stack Explained
+Carter - Minimal API Endpoints
+
+Lightweight alternative to traditional Controllers
+Functional endpoint definitions
+Clean, organized API routes
+Supports route grouping and modules
+
+MediatR - CQRS Implementation
+
+Commands: Handle write operations (Create, Update, Delete)
+Queries: Handle read operations (Get, List, Search)
+Separates read and write concerns
+Pipeline behaviors for validation, logging, and performance tracking
+
+FluentValidation - Input Validation
+
+Strongly-typed validation rules
+Automatic validation in MediatR pipeline
+Clear error messages
+Reusable validation logic
+
+Marten - Event Sourcing (Ordering Service)
+
+PostgreSQL as document database
+Event store for order history
+Stores aggregates as JSON documents
+Optimistic concurrency control
+Event projections to read models
+
+Entity Framework Core - Traditional ORM
+
+Used in Catalog and Discount services
+Relational data access
+LINQ query support
+Database migrations
+Change tracking
+
+Building Blocks - Shared Libraries
+Location: eShopMicroservices/BuildingBlocks/
+Reusable components shared across all microservices:
+
+BuildingBlocks.CQRS: ICommand, IQuery, ICommandHandler, IQueryHandler interfaces
+BuildingBlocks.Messaging: Domain events, integration events, MassTransit configuration
+BuildingBlocks.Behaviors: Validation, logging, and performance pipeline behaviors
+BuildingBlocks.Exceptions: Custom domain exceptions
+
+Polly - Resilience & Retry Policies
+
+Handles transient failures
+Retry policies with exponential backoff
+Circuit breaker pattern
+Timeout policies
+Applied to HTTP clients and database operations
+
+OpenTelemetry - Distributed Tracing
+
+End-to-end request tracing across all services
+Automatic instrumentation for HTTP, SQL, RabbitMQ
+Exports traces to Jaeger
+Correlates logs, traces, and metrics
+Performance monitoring
+
+Serilog - Structured Logging
+
+JSON-formatted logs
+Enriched with context (trace IDs, user IDs, etc.)
+Centralized logging to Elasticsearch
+Queryable log data
+Different log levels per environment
+
+gRPC - Inter-Service Communication
+
+High-performance RPC framework
+Type-safe service contracts
+Used for synchronous service-to-service calls
+Example: Basket API calls Discount API via gRPC for real-time discount calculations
+
+CQRS Pattern in Action
+Write Path (Commands):
+
+User submits request → API endpoint (Carter)
+Command created and validated (FluentValidation)
+Command sent through MediatR pipeline
+Command handler processes business logic
+Changes persisted to database
+Domain events published to RabbitMQ
+
+Read Path (Queries):
+
+User requests data → API endpoint (Carter)
+Query created and sent through MediatR
+Query handler retrieves data
+Data cached in Redis (if applicable)
+Response returned to user
+
+Benefits:
+
+Optimized read and write models
+Independent scaling of reads vs writes
+Improved performance with caching
+Clear separation of concerns
 
 ---
 
@@ -407,25 +554,106 @@ GitOps/
 
 ### FluxCD Workflow
 
+How FluxCD Works with Helm Base + Overlay
+Base HelmRelease Template (apps/base/helmrelease.yaml):
+
+Generic template with placeholder values
+References the boilerplate Helm chart from ACR
+Used as foundation for all services
+
+Service-Specific Overlays (e.g., apps/basket/dev/):
+
+kustomization.yaml: Patches the base HelmRelease
+
+Replaces placeholders with service-specific names
+Generates ConfigMaps and Secrets from values files
+Injects environment-specific configurations
+
+
+values-dev.yaml: Contains all service configurations
+
+Image repository and tag
+Replica count
+Resource limits
+Database connections
+Redis configuration
+RabbitMQ settings
+Ingress rules
+Health check settings
+
+
+
+Deployment Flow:
+1. CI Pipeline completes
+   └─> Builds Docker image: basket-api:v1.0.50
+   └─> Pushes to ACR
+   └─> Updates GitOps repo: apps/basket/dev/values-dev.yaml
+   └─> Commits new image tag
+
+2. FluxCD Source Controller (every 1-5 minutes)
+   └─> Detects Git commit in GitOps repo
+
+3. FluxCD Kustomize Controller
+   └─> Reads apps/basket/dev/kustomization.yaml
+   └─> Loads base HelmRelease template
+   └─> Generates ConfigMap from values-dev.yaml
+   └─> Generates Secret from values-dev.yaml
+   └─> Patches base template:
+       • Replaces name: app-placeholder → basketapi-dev
+       • Injects ConfigMap reference
+       • Injects Secret reference
+
+4. FluxCD Helm Controller
+   └─> Reads HelmRelease: basketapi-dev
+   └─> Fetches Helm chart from ACR
+   └─> Merges values from ConfigMap and Secret
+   └─> Renders Helm templates
+   └─> Applies to AKS namespace: flux-apps
+
+5. Kubernetes
+   └─> Creates/Updates Deployment: basketapi-dev (2 replicas)
+   └─> Creates/Updates Service: basketapi-dev
+   └─> Creates/Updates Ingress: basket-api-dev.eshop.com
+   └─> Health checks pass
+   └─> Deployment ready
+
+6. FluxCD Notification
+   └─> Posts success message to Teams/Slack
+Key Benefits:
+
+Single Helm Chart: One boilerplate chart used for all services
+Environment-Specific Values: Each environment has unique configuration
+No Helm CLI: FluxCD manages everything automatically
+Git as Source of Truth: All changes tracked and auditable
+Automated Reconciliation: Cluster state always matches Git
+Easy Rollback: Git revert automatically reverts deployment
+
+FluxCD Reconciliation Loop
+┌─────────────────────────────────────────────────────┐
+│                  FluxCD Reconciliation Loop         │
+│                                                     │
+│  Git Commit (New Image Tag)                         │
+│         ↓                                           │
+│  Source Controller (Detects Change)                 │
+│         ↓                                           │
+│  Kustomize Controller (Builds Manifests)            │
+│         ↓                                           │
+│  Apply to AKS Cluster                               │
+│         ↓                                           │
+│  Health Check & Validation                          │
+│         ↓                                           │
+│  Notification (Teams/Slack)                         │
+│                                                     │
+│  ◄────── Continuous Reconciliation (1-5 min) ───────┤
+└─────────────────────────────────────────────────────┘
 ```
-┌──────────────────────────────────────────────────────┐
-│                  FluxCD Reconciliation Loop          │
-│                                                      │
-│  Git Commit (New Image Tag)                          │
-│         ↓                                            │ 
-│  Source Controller (Detects Change)                  │
-│         ↓                                            │
-│  Kustomize Controller (Builds Manifests)             │
-│         ↓                                            │
-│  Apply to AKS Cluster                                │
-│         ↓                                            │
-│  Health Check & Validation                           │
-│         ↓                                            │
-│  Notification (Teams/Slack)                          │
-│                                                      │
-│  ◄────── Continuous Reconciliation (1-5 min)  ───────┤
-└──────────────────────────────────────────────────────┘
-```
+
+Key Features:
+
+Drift Detection: Auto-corrects manual changes back to Git state
+Progressive Delivery: Canary deployments with Flagger
+Automated Rollback: Reverts on health check failures
+Multi-Environment: Separate overlays for dev/staging/prod
 
 **Key Features:**
 - **Drift Detection**: Auto-corrects manual changes back to Git state
