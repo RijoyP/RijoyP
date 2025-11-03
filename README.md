@@ -66,10 +66,10 @@ eShop Microservices is a production-grade distributed e-commerce system demonstr
 │  └────┬─────┘  └────┬─────┘  └────┬─────┘  └────────┬─────┘          │
 │       │             │             │                 │                │
 │       ▼             ▼             ▼                 ▼                │
-│  ┌────────┐    ┌─────────┐    ┌────────┐        ┌──────────┐          │
-│  │Postgre │    │Postgre  │    │ SQLite │        │   SQL    │          │
-│  │  SQL   │    │SQL+Redis│    │        │        │  Server  │          │
-│  └────────┘    └─────────┘    └────────┘        └──────────┘          │
+│  ┌────────┐    ┌─────────┐    ┌────────┐        ┌──────────┐         │
+│  │Postgre │    │Postgre  │    │ SQLite │        │   SQL    │         │
+│  │  SQL   │    │SQL+Redis│    │        │        │  Server  │         │
+│  └────────┘    └─────────┘    └────────┘        └──────────┘         │
 └─────────────────────────────┬────────────────────────────────────────┘
                               │
                               ▼
@@ -291,7 +291,7 @@ Core domain concepts:
 
 **Integration Patterns:**
 
-**Catalog → Ordering (Anti-Corruption Layer)**
+**Catalog → Ordering**
 - Ordering translates Catalog models to its own domain objects
 - Prevents breaking changes from cascading
 
@@ -299,11 +299,11 @@ Core domain concepts:
 - Basket publishes events, Ordering subscribes
 - Loose coupling through RabbitMQ
 
-**Ordering → Payment (Synchronous Partnership)**
+**Ordering → Payment (Synchronous)**
 - Direct API calls with shared payment concepts
 - Transactional consistency maintained
 
-**Discount → Ordering (Conformist)**
+**Discount → Ordering**
 - Ordering calls Discount API for price calculations
 - Read-only relationship with graceful degradation
 
