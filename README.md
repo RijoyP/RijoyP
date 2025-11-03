@@ -520,8 +520,9 @@ For each technical stack × task combination, generates complete pipeline YAML
 Validates generated files for syntax and schema
 Outputs to applications/profiles/ directory
 
-Generated Profiles: CICD-Templates/applications/profiles
-Sample Generated Files: [Profiles](https://github.com/RijoyP/CICD-Templates/tree/main/applications/profiles)
+Generated Profiles: [CICD-Templates/applications/profiles](https://github.com/RijoyP/CICD-Templates/tree/main/applications/profiles)
+
+Sample Generated Files: 
 
 | Profile | Build | Linting | Unit Tests | SCA | Publish | Parameters |
 |---------|-------|---------|------------|-----|--------|------------|
