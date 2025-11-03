@@ -631,9 +631,11 @@ Git as Source of Truth: All changes tracked and auditable
 Automated Reconciliation: Cluster state always matches Git
 Easy Rollback: Git revert automatically reverts deployment
 
-FluxCD Reconciliation Loop
+### FluxCD Reconciliation Loop
+
+```
 ┌─────────────────────────────────────────────────────┐
-│                  FluxCD Reconciliation Loop         │
+│  FluxCD Reconciliation Loop                         │
 │                                                     │
 │  Git Commit (New Image Tag)                         │
 │         ↓                                           │
