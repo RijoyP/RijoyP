@@ -700,16 +700,20 @@ Boilerplate Helm chart for consistent microservice deployments:
 
 **Stack Options:**
 
-**ELK Stack**: Fluentd → Elasticsearch → Kibana
+**Stack: Serilog → Elasticsearch → Kibana**
+How It Works:
 
-**PLG Stack**: Promtail → Loki → Grafana
+Serilog: Structured logging library integrated into all .NET microservices
+Elasticsearch: Stores and indexes log data for fast searching
+Kibana: Provides visualization dashboards and log exploration UI
 
-**Capabilities:**
-- Centralized log aggregation from all services
-- Full-text search and filtering
-- Pre-built dashboards for error tracking
-- Log retention policies (dev: 7d, staging: 30d, prod: 90d)
-- Correlation with trace IDs
+Features:
+
+Centralized structured log aggregation from all services
+Full-text search and filtering across all logs
+Pre-built Kibana dashboards for error tracking and service health
+Trace ID correlation for distributed debugging
+Real-time log streaming and alerting
 
 **Deployment**: [GitOps/infrastructure/logging](https://github.com/RijoyP/GitOps/tree/main/eShopMicroService/infrastructure/logging)
 
@@ -717,14 +721,17 @@ Boilerplate Helm chart for consistent microservice deployments:
 
 ### Tracing
 
-**Component**: Jaeger with OpenTelemetry
+**Stack: Zipkin + Jaeger with OpenTelemetry → Grafana**
+How It Works:
+
+OpenTelemetry: Instruments .NET services to collect trace data
+Zipkin: Collects and processes trace spans from services
+Jaeger: Provides advanced trace storage and querying capabilities
+Grafana: Visualizes traces with unified dashboard alongside metrics
 
 **Features:**
-- Distributed trace tracking across all microservices
-- Automatic instrumentation for HTTP, SQL, RabbitMQ
-- Latency analysis and bottleneck identification
-- Service dependency mapping
-- Error tracing and root cause analysis
+
+End-to-end request tracing across all microservices
 
 **Deployment**: [GitOps/infrastructure/tracing](https://github.com/RijoyP/GitOps/tree/main/eShopMicroService/infrastructure/tracing)
 
@@ -732,20 +739,16 @@ Boilerplate Helm chart for consistent microservice deployments:
 
 ### Monitoring
 
-**Stack**: Prometheus + Grafana + Alertmanager
+**Stack: Prometheus + Grafana**
+How It Works:
 
-**Metrics Collected:**
-- Application metrics (request rates, latencies, errors)
-- Infrastructure metrics (CPU, memory, disk, network)
-- Database metrics (connections, query performance)
-- RabbitMQ metrics (queue depth, message rates)
-- Custom business metrics
+Prometheus: Scrapes metrics from all services and infrastructure
+Grafana: Provides unified dashboards for metrics, traces, and logs
 
-**Features:**
-- Real-time dashboards
-- Alert rules for SLOs
-- Multi-environment views
-- Historical trend analysis
+Metrics Collected:
+
+Application: Request rates, response latencies, error rates, HTTP status codes
+Infrastructure: CPU usage, memory consumption, disk I/O, network throughput
 
 **Deployment**: [GitOps/infrastructure/monitoring](https://github.com/RijoyP/GitOps/tree/main/eShopMicroService/infrastructure/monitoring)
 
@@ -758,9 +761,7 @@ Boilerplate Helm chart for consistent microservice deployments:
 **Features:**
 - Event-driven communication between services
 - Durable queues for reliable message delivery
-- Dead letter queues for failed messages
 - Message tracing and monitoring
-- High availability clustering
 
 **Deployment**: [GitOps/infrastructure/messaging](https://github.com/RijoyP/GitOps/tree/main/eShopMicroService/infrastructure/messaging/)
 
