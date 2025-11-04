@@ -15,6 +15,23 @@ Summary
 | [CICD-Templates](https://github.com/RijoyP/CICD-Templates) | Reusable pipeline templates |
 | [helm-templates](https://github.com/RijoyP/helm-templates) | Helm chart boilerplate |
 
+## 🔗 Infra Urls Links
+
+| Urls | Purpose |
+|------------|---------|
+| [jaeger](http://jaeger.20.251.183.221.nip.io/) | Jaeger |
+| [grafana](http://grafana.20.251.183.221.nip.io/) | Grafana |
+| [kibana](http://kibana.20.251.183.221.nip.io/) | Kibana |
+| [prometheus](http://prometheus.20.251.183.221.nip.io/) | Prometheus |
+| [elasticsearch](http://elasticsearch.20.251.183.221.nip.io/) | Elastic Search |
+| [zipkin](http://zipkin.20.251.183.221.nip.io/) | Zipkin |
+
+## 🔗 Backend Urls Links
+
+| Urls | Purpose |
+|------------|---------|
+| [Catalog](http://4.220.24.169/catalog/swagger/index.html) | Catatlog API |
+
 # eShop Microservices - High Level Design
 
 ## 🎯 Overview
