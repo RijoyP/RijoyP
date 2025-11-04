@@ -799,15 +799,13 @@ Infrastructure: CPU usage, memory consumption, disk I/O, network throughput
 
 **Scalability**: Horizontal scaling through Kubernetes HPA, independent service scaling
 
-**Resilience**: Circuit breakers, retry policies, health checks, automated recovery
+**Resilience**: Circuit breakers, retry policies, health checks
 
 **Security**: Azure AD authentication, managed identities, Key Vault integration, network policies
 
 **Observability**: Comprehensive logging, tracing, and monitoring across all layers
 
 **Automation**: Fully automated CI/CD pipelines, GitOps-driven deployments
-
-**Compliance**: Audit trails, encryption at rest and in transit, RBAC
 
 ---
 
