@@ -17,20 +17,20 @@ Summary
 
 ## 🔗 Infra Urls Links
 
-| Urls | Purpose |
+| Resource | Url |
 |------------|---------|
-| http://jaeger.20.251.183.221.nip.io/ | Jaeger |
-| [grafana](http://grafana.20.251.183.221.nip.io/) | Grafana |
-| [kibana](http://kibana.20.251.183.221.nip.io/) | Kibana |
-| [prometheus](http://prometheus.20.251.183.221.nip.io/) | Prometheus |
-| [elasticsearch](http://elasticsearch.20.251.183.221.nip.io/) | Elastic Search |
-| [zipkin](http://zipkin.20.251.183.221.nip.io/) | Zipkin |
+| Jaeger | http://jaeger.20.251.183.221.nip.io/ | 
+| Grafana | http://grafana.20.251.183.221.nip.io/ | 
+| Kibana | http://kibana.20.251.183.221.nip.io/ | 
+| Prometheus | http://prometheus.20.251.183.221.nip.io/ | 
+| Elastic Search | http://elasticsearch.20.251.183.221.nip.io/ | 
+| Zipkin | http://zipkin.20.251.183.221.nip.io/ | 
 
 ## 🔗 Backend Urls Links
 
-| Urls | Purpose |
+| Backend | Urls |
 |------------|---------|
-| [Catalog](http://4.220.24.169/catalog/swagger/index.html) | Catatlog API |
+| Catatlog API | http://4.220.24.169/catalog/swagger/index.html | 
 
 # eShop Microservices - High Level Design
 
