@@ -19,7 +19,7 @@ Summary
 
 | Urls | Purpose |
 |------------|---------|
-| (http://jaeger.20.251.183.221.nip.io/) | Jaeger |
+| http://jaeger.20.251.183.221.nip.io/ | Jaeger |
 | [grafana](http://grafana.20.251.183.221.nip.io/) | Grafana |
 | [kibana](http://kibana.20.251.183.221.nip.io/) | Kibana |
 | [prometheus](http://prometheus.20.251.183.221.nip.io/) | Prometheus |
