@@ -30,8 +30,8 @@ Summary
 
 | Backend | Urls |
 |------------|---------|
-| Catatlog API | http://4.220.41.138/catalog/swagger/index.html | 
-| Discount API | http://4.220.41.138/Discount/swagger/index.html | 
+| Catatlog API | http://catalog.4.220.41.138.nip.io/ | 
+| Discount API | http://discount.4.220.41.138.nip.io/ | 
 
 # eShop Microservices - High Level Design
 
