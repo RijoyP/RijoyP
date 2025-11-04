@@ -701,6 +701,7 @@ Boilerplate Helm chart for consistent microservice deployments:
 **Stack Options:**
 
 **Stack: Serilog → Elasticsearch → Kibana**
+
 How It Works:
 
 Serilog: Structured logging library integrated into all .NET microservices
@@ -722,6 +723,7 @@ Real-time log streaming and alerting
 ### Tracing
 
 **Stack: Zipkin + Jaeger with OpenTelemetry → Grafana**
+
 How It Works:
 
 OpenTelemetry: Instruments .NET services to collect trace data
@@ -740,6 +742,7 @@ End-to-end request tracing across all microservices
 ### Monitoring
 
 **Stack: Prometheus + Grafana**
+
 How It Works:
 
 Prometheus: Scrapes metrics from all services and infrastructure
