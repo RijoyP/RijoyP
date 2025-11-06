@@ -521,7 +521,7 @@ Terraform Validate → Plan → Apply (Dev) → Apply (Staging) → Apply (Prod)
 │  Deployment  │
 └──────────────┘
 
-![Screenshot](screenshot.png)
+![Screenshot](pipeline.jpg)
 
 
 ```
