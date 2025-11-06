@@ -521,9 +521,6 @@ Terraform Validate → Plan → Apply (Dev) → Apply (Staging) → Apply (Prod)
 │  Deployment  │
 └──────────────┘
 
-![Screenshot](pipeline.jpg)
-
-
 ```
 
 **Pipeline Files**: [eShopMicroservices/.pipeline](https://github.com/RijoyP/eShopMicroservices/tree/main/.pipelines)
