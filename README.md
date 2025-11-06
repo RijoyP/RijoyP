@@ -522,6 +522,8 @@ Terraform Validate → Plan → Apply (Dev) → Apply (Staging) → Apply (Prod)
 └──────────────┘
 
 ![Pipeline Diagram](https://github.com/user-attachments/assets/d6640bf9-8cc3-468e-bfd6-01eba6aa6d12)
+<img src="https://github.com/user-attachments/assets/d6640bf9-8cc3-468e-bfd6-01eba6aa6d12" width="400">
+
 
 ```
 
