@@ -520,6 +520,9 @@ Terraform Validate → Plan → Apply (Dev) → Apply (Staging) → Apply (Prod)
 │  FluxCD      │  → Auto-sync to AKS
 │  Deployment  │
 └──────────────┘
+
+<img width="917" height="412" alt="image" src="https://github.com/user-attachments/assets/d6640bf9-8cc3-468e-bfd6-01eba6aa6d12" />
+
 ```
 
 **Pipeline Files**: [eShopMicroservices/.pipeline](https://github.com/RijoyP/eShopMicroservices/tree/main/.pipelines)
