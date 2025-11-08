@@ -15,7 +15,7 @@ Summary
 | [CICD-Templates](https://github.com/RijoyP/CICD-Templates) | Reusable pipeline templates |
 | [helm-templates](https://github.com/RijoyP/helm-templates) | Helm chart boilerplate |
 
-## 🔗 Infra Monitoring/Loggin/Tracing/Messaging Urls Links
+## 🔗 Infra Monitoring / Logging / Tracing / Messaging Urls Links
 
 | Resource | Url |
 |------------|---------|
