@@ -278,10 +278,6 @@ Core domain concepts:
 
 **Domain Events Published:**
 - `OrderCreated` → Triggers inventory reservation
-- `OrderPaid` → Initiates fulfillment
-- `OrderStatusChanged` → Updates tracking systems
-- `OrderShipped` → Notifies customer
-- `OrderDelivered` → Closes order
 
 #### Context Mapping
 
