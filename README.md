@@ -15,7 +15,7 @@ Summary
 | [CICD-Templates](https://github.com/RijoyP/CICD-Templates) | Reusable pipeline templates |
 | [helm-templates](https://github.com/RijoyP/helm-templates) | Helm chart boilerplate |
 
-## 🔗 Infra Urls Links
+## 🔗 Infra Monitoring/Loggin/Tracing/Messaging Urls Links
 
 | Resource | Url |
 |------------|---------|
@@ -23,8 +23,8 @@ Summary
 | Grafana | http://grafana.20.251.183.221.nip.io/ | 
 | Kibana | http://kibana.20.251.183.221.nip.io/ | 
 | Prometheus | http://prometheus.20.251.183.221.nip.io/ | 
-| Elastic Search | http://elasticsearch.20.251.183.221.nip.io/ | 
 | Zipkin | http://zipkin.20.251.183.221.nip.io/ | 
+| Rabbit MQ | http://rabbitmq.20.251.183.221.nip.io/ | 
 
 ## 🔗 Backend Urls Links
 
