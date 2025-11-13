@@ -297,9 +297,7 @@ Core domain concepts:
 │       │ (Partnership)                                   │
 │       ▼                                                 │
 │  Payment Context                                        │
-│                                                         │
-│  Discount Context ──(Conformist)──► Ordering            │
-│                                                         │
+│                                                         │         
 └─────────────────────────────────────────────────────────┘
 ```
 
