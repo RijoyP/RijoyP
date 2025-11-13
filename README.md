@@ -143,7 +143,7 @@ eShop Microservices is a production-grade distributed e-commerce system demonstr
 
 ### Architecture Layers
 
-All microservices follow Clean Architecture principles with clear separation of concerns:
+Order microservices follow Clean Architecture principles with clear separation of concerns:
 
 ```
 ┌──────────────────────────────────────────────────────┐
