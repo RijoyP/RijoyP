@@ -30,6 +30,7 @@ Summary
 
 | Backend | Urls |
 |------------|---------|
+| Front End React | http://eshopreact.4.220.41.138.nip.io/ | 
 | Catatlog API | http://catalog.4.220.41.138.nip.io/swagger/index.html | 
 | Discount API | http://discount.4.220.41.138.nip.io/swagger/index.html | 
 | Basket API | http://basket.4.220.41.138.nip.io/swagger/index.html |
