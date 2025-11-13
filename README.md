@@ -38,6 +38,8 @@ Summary
 
 # eShop Microservices - High Level Design
 
+![Project Diagram](https://github.com/RijoyP/RijoyP/blob/main/assets/eshopnew.png)
+
 ## 🎯 Overview
 
 eShop Microservices is a production-grade distributed e-commerce system demonstrating modern cloud-native patterns and practices.
@@ -520,6 +522,8 @@ Terraform Validate → Plan → Apply (Dev) → Apply (Staging) → Apply (Prod)
 └──────────────┘
 
 ```
+
+![Pipeline Diagram](https://github.com/RijoyP/RijoyP/blob/main/assets/pipelinenew.png)
 
 **Pipeline Files**: [eShopMicroservices/.pipeline](https://github.com/RijoyP/eShopMicroservices/tree/main/.pipelines)
 
