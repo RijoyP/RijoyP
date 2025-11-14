@@ -64,7 +64,7 @@ eShop Microservices is a production-grade distributed e-commerce system demonstr
 │                          CLIENT LAYER                                   │
 │                     ┌──────────────────────┐                            │
 │                     │   Shopping.Web       │                            │
-│                     │   (ASP.NET Core)     │                            │
+│                     │      (React)         │                            │
 │                     └──────────┬───────────┘                            │
 └────────────────────────────────┼────────────────────────────────────────┘
                                  │ HTTPS
