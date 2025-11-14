@@ -38,7 +38,7 @@ Summary
 
 # eShop Microservices - High Level Design
 
-![Project Diagram](https://github.com/RijoyP/RijoyP/blob/main/assets/eshop.png)
+![Project Diagram](https://github.com/RijoyP/RijoyP/blob/main/assets/eshop_diagram.png)
 
 ## 🎯 Overview
 
