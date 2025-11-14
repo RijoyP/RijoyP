@@ -57,7 +57,7 @@ eShop Microservices is a production-grade distributed e-commerce system demonstr
 
 ### High-Level System Architecture
 
-![Project Diagram](https://github.com/RijoyP/RijoyP/blob/main/assets/eshopd.png)
+![Project Diagram](https://github.com/RijoyP/RijoyP/blob/main/assets/eshopdiagram.png)
 
 ---
 
