@@ -685,6 +685,8 @@ End-to-end request tracing across all microservices
 
 **Stack: Prometheus + Grafana**
 
+![Grafana Dashhboard](https://github.com/RijoyP/RijoyP/blob/main/assets/grafana.png)
+
 How It Works:
 
 Prometheus: Scrapes metrics from all services and infrastructure
