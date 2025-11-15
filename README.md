@@ -644,6 +644,8 @@ Boilerplate Helm chart for consistent microservice deployments:
 
 **Stack: Serilog → Elasticsearch → Kibana**
 
+![Kibana Dashboard](https://github.com/RijoyP/RijoyP/blob/main/assets/elasticsearch.png)
+
 How It Works:
 
 Serilog: Structured logging library integrated into all .NET microservices
