@@ -498,15 +498,31 @@ GitOps/
 │   └── messaging/              # RabbitMQ
 │
 └── apps/                       # Microservice deployments
-    ├── base/
-    │   ├── catalog-api/
-    │   ├── basket-api/
-    │   ├── discount-api/
-    │   └── ordering-api/
-    └── overlays/
-        ├── dev/
-        ├── staging/
-        └── production/
+    └── base/                   #base overlays
+        └── ingress/
+        └── frontend-react/
+        |    ├── dev
+        |    ├── stg
+        |    └── prod
+        ├── catalog-api/
+        |    ├── dev
+        |    ├── stg
+        |    └── prod
+        ├── basket-api/
+        |    ├── dev
+        |    ├── stg
+        |    └── prod
+        ├── discount-api/
+        |    ├── dev
+        |    ├── stg
+        |    └── prod
+        └── ordering-api/
+             ├── dev
+             ├── stg
+             └── prod
+
+
+
 ```
 
 ### FluxCD Workflow
