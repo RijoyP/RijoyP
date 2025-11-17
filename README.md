@@ -669,12 +669,17 @@ Real-time log streaming and alerting
 **Stack: Zipkin + Jaeger with OpenTelemetry → Grafana**
 
 **Zipkin**
+
 ![zipkinlist](https://github.com/RijoyP/RijoyP/blob/main/assets/zipkin_list.png)
+
 ![zipkin](https://github.com/RijoyP/RijoyP/blob/main/assets/zipkin.png)
+
 ![zipkin_flow](https://github.com/RijoyP/RijoyP/blob/main/assets/zipkin_flow.png)
 
 **Jaeger**
+
 ![jaeger_ist](https://github.com/RijoyP/RijoyP/blob/main/assets/jeager_all.png)
+
 ![jaeger](https://github.com/RijoyP/RijoyP/blob/main/assets/jaeger.png)
 
 How It Works:
