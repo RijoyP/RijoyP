@@ -1,7 +1,7 @@
 # eShopMicroServices — High Level Architecture & Service Responsibilities
 
 Summary
-- eShopMicroServices is a containerized .NET microservices suite composed of four primary backend services (Basket, Discount, Order, Catalog).  
+- eShopMicroServices is a containerized .NET & Java microservices suite composed of four primary backend services (Basket, Discount, Order, Catalog).  
 - Deployed on AKS using Flux GitOps and Azure infrastructure provisioned via Terraform (CICD-Templates + terraform-modules).  
 - CI builds images, pushes to ACR, and updates the GitOps repo; Flux reconciles cluster state.
 
