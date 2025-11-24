@@ -30,7 +30,7 @@ Summary
 
 | Backend | Urls |
 |------------|---------|
-| Front End React (React Typescript) | http://eshopreact.4.220.41.138.nip.io/ | 
+| Front End React (React Typescript) | https://eshopreact.4.220.41.138.nip.io/ | 
 | Catatlog API (ASP.NET Core 8.0) | http://catalog.4.220.41.138.nip.io/swagger/index.html | 
 | Discount API (ASP.NET Core 8.0) | http://discount.4.220.41.138.nip.io/swagger/index.html | 
 | Basket API (ASP.NET Core 8.0) | http://basket.4.220.41.138.nip.io/swagger/index.html |
