@@ -132,8 +132,8 @@ Order microservices follow Clean Architecture principles with clear separation o
 │                         Azure AD B2C Tenant                      │
 │                                                                  │
 │  ┌──────────────┐  ┌───────────────┐  ┌──────────────┐           │
-│  │ Catalog API  │  │   Discount API│  │    React     │           │
-│  │  (App)       │  │   (App)       │  │   Frontend   │           │
+│  │ Catalog API  │  │  Discount API │  │    React     │           │
+│  │   *Backend)  │  │    (Backend)  │  │   (Frontend) │           │
 │  │ Roles:       │  │ Roles:        │  │              │           │
 │  │ CatalogWrite │  │ DiscountWrite │  │ Permissions: │           │
 │  │              │  │               │  │ - Catalog    │           │
