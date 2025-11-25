@@ -125,6 +125,30 @@ Order microservices follow Clean Architecture principles with clear separation o
 
 ---
 
+**Azure AD Authentication Flow**
+
+┌──────────────────────────────────────────────────────────────────┐
+│                         Azure AD B2C Tenant                      │
+│                                                                  │
+│  ┌──────────────┐  ┌───────────────┐  ┌──────────────┐           │
+│  │ Catalog API  │  │   Discount API│  │    React     │           │
+│  │  (App)       │  │   (App)       │  │   Frontend   │           │
+│  │ Roles:       │  │ Roles:        │  │              │           │
+│  │ CatalogWrite │  │ DiscountWrite │  │ Permissions: │           │
+│  │              │  │               │  │ - Catalog    │           │
+│  │ Scopes:      │  │ Scopes:       │  │ - Discount   │           │
+│  │ Catalog.Write│  │ Discount.Write│  │              │           │
+│  └──────────────┘  └───────────────┘  └──────────────┘           │
+│                                                                  │
+│  ┌──────────────┐                    ┌──────────────┐            │
+│  │ Catalog User │                    │ Discount User│            │
+│  │              │                    │              │            │
+│  │ Assigned:    │                    │ Assigned:    │            │
+│  │ CatalogWrite │                    │ DiscountWrite│            │
+│  └──────────────┘                    └──────────────┘            │
+│                                                                  │
+└──────────────────────────────────────────────────────────────────┘
+
 ### 1. Catalog API
 
 **Purpose**: Product catalog and inventory management
