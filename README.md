@@ -127,6 +127,7 @@ Order microservices follow Clean Architecture principles with clear separation o
 
 **Azure AD Authentication Flow**
 
+```
 ┌──────────────────────────────────────────────────────────────────┐
 │                         Azure AD B2C Tenant                      │
 │                                                                  │
@@ -148,6 +149,8 @@ Order microservices follow Clean Architecture principles with clear separation o
 │  └──────────────┘                    └──────────────┘            │
 │                                                                  │
 └──────────────────────────────────────────────────────────────────┘
+
+```
 
 ### 1. Catalog API
 
