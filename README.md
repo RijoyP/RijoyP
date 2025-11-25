@@ -125,7 +125,7 @@ Order microservices follow Clean Architecture principles with clear separation o
 
 ---
 
-**Azure AD Authentication Flow**
+**Azure AD Authentication & Autherization Code Workflow **
 
 ```
 ┌──────────────────────────────────────────────────────────────────┐
@@ -133,21 +133,19 @@ Order microservices follow Clean Architecture principles with clear separation o
 │                                                                  │
 │  ┌──────────────┐  ┌───────────────┐  ┌──────────────┐           │
 │  │ Catalog API  │  │  Discount API │  │    React     │           │
-│  │   *Backend)  │  │    (Backend)  │  │   (Frontend) │           │
+│  │  (Backend)   │  │   (Backend)   │  │  (Frontend)  │           │
 │  │ Roles:       │  │ Roles:        │  │              │           │
 │  │ CatalogWrite │  │ DiscountWrite │  │ Permissions: │           │
 │  │              │  │               │  │ - Catalog    │           │
 │  │ Scopes:      │  │ Scopes:       │  │ - Discount   │           │
 │  │ Catalog.Write│  │ Discount.Write│  │              │           │
 │  └──────────────┘  └───────────────┘  └──────────────┘           │
-│                                                                  │
 │  ┌──────────────┐                    ┌──────────────┐            │
 │  │ Catalog User │                    │ Discount User│            │
 │  │              │                    │              │            │
 │  │ Assigned:    │                    │ Assigned:    │            │
 │  │ CatalogWrite │                    │ DiscountWrite│            │
 │  └──────────────┘                    └──────────────┘            │
-│                                                                  │
 └──────────────────────────────────────────────────────────────────┘
 
 ```
