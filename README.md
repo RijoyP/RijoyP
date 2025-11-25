@@ -31,11 +31,11 @@ Summary
 | Backend | Urls |
 |------------|---------|
 | Front End React (React Typescript) | https://eshopreact.4.220.41.138.nip.io/ | 
-| Catatlog API (ASP.NET Core 8.0) | http://catalog.4.220.41.138.nip.io/swagger/index.html | 
-| Discount API (ASP.NET Core 8.0) | http://discount.4.220.41.138.nip.io/swagger/index.html | 
-| Basket API (ASP.NET Core 8.0) | http://basket.4.220.41.138.nip.io/swagger/index.html |
-| Order API (ASP.NET Core 8.0) | http://order.4.220.41.138.nip.io/swagger/index.html |
-| Customer API (Java : Maven) | http://customer.4.220.41.138.nip.io/swagger-ui/index.html |
+| Catatlog API (ASP.NET Core 8.0) | https://catalog.4.220.41.138.nip.io/swagger/index.html | 
+| Discount API (ASP.NET Core 8.0) | https://discount.4.220.41.138.nip.io/swagger/index.html | 
+| Basket API (ASP.NET Core 8.0) | https://basket.4.220.41.138.nip.io/swagger/index.html |
+| Order API (ASP.NET Core 8.0) | https://order.4.220.41.138.nip.io/swagger/index.html |
+| Customer API (Java : Maven) | https://customer.4.220.41.138.nip.io/swagger-ui/index.html |
 
 # eShop Microservices - High Level Design
 
