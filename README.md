@@ -125,7 +125,7 @@ Order microservices follow Clean Architecture principles with clear separation o
 
 ---
 
-**Azure AD Authentication & Autherization Code Workflow **
+**Azure AD Authentication **
 
 ```
 ┌──────────────────────────────────────────────────────────────────┐
@@ -149,6 +149,76 @@ Order microservices follow Clean Architecture principles with clear separation o
 └──────────────────────────────────────────────────────────────────┘
 
 ```
+
+**Authentication Flow Diagram**
+
+```
+
+┌──────────┐                                                    ┌──────────┐
+│          │  1. User clicks "Login"                            │          │
+│          │ ─────────────────────────────────────────────────> │          │
+│          │                                                    │          │
+│          │  2. Redirect to Azure AD B2C login page            │  Azure   │
+│  React   │ <───────────────────────────────────────────────── │  AD B2C  │
+│   App    │                                                    │          │
+│          │  3. User enters credentials                        │          │
+│          │ ─────────────────────────────────────────────────> │          │
+│          │                                                    │          │
+│          │  4. ID Token (user identity)                       │          │
+│          │ <───────────────────────────────────────────────── │          │
+└────┬─────┘                                                    └──────────┘
+     │
+     │ User is now logged in
+     │
+     │ 5. User attempts to create product
+     │
+     ▼
+┌──────────┐
+│  React   │  6. Request Access Token
+│   App    │     Scope: api://catalog-api/Catalog.Write
+│          │     Account: cataloguser@domain.com
+└────┬─────┘
+     │
+     │ 7. acquireTokenSilent()
+     │
+     ▼
+┌──────────┐
+│  Azure   │  8. Validate user + scope
+│  AD B2C  │     Check: Does user have CatalogWrite role?
+│          │     Yes → Issue Access Token
+└────┬─────┘
+     │
+     │ 9. Access Token
+     │    {
+     │      "aud": "api://catalog-api",
+     │      "roles": ["CatalogWrite"],
+     │      "scp": "Catalog.Write"
+     │    }
+     │
+     ▼
+┌──────────┐
+│  React   │  10. POST /api/catalog/create
+│   App    │      Authorization: Bearer <access-token>
+│          │      Body: { name: "Product", price: 99.99 }
+└────┬─────┘
+     │
+     │
+     ▼
+┌──────────┐
+│ Catalog  │  11. Validate Token
+│   API    │      • Verify signature
+│          │      • Check expiration
+│          │      • Validate audience
+│          │      • Check role: CatalogWrite
+│          │
+│          │  12. Execute: Create Product
+│          │
+│          │  13. Response: 200 OK
+│          │      { "id": "123", "name": "Product" }
+└──────────┘
+
+```
+
 
 ### 1. Catalog API
 
