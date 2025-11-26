@@ -125,7 +125,7 @@ Order microservices follow Clean Architecture principles with clear separation o
 
 ---
 
-**Azure AD Authentication **
+**Admin Azure AD Authentication**
 
 ```
 ┌──────────────────────────────────────────────────────────────────┐
@@ -150,7 +150,7 @@ Order microservices follow Clean Architecture principles with clear separation o
 
 ```
 
-**Authentication Flow Diagram**
+**Admin Authentication Flow Diagram**
 
 ```
 
