@@ -4,9 +4,10 @@ https://myprofile.4.220.41.138.nip.io
 # eShopMicroServices — High Level Architecture & Service Responsibilities
 
 Summary
-- eShopMicroServices is a containerized .NET & Java microservices suite composed of four primary backend services (Basket, Discount, Order, Catalog).  
-- Deployed on AKS using Flux GitOps and Azure infrastructure provisioned via Terraform (CICD-Templates + terraform-modules).  
-- CI builds images, pushes to ACR, and updates the GitOps repo; Flux reconciles cluster state.
+- eShopMicroServices is a containerized **.NET** & **Java** microservices suite composed of four primary backend services (Basket, Discount, Order, Catalog).  
+- RAG + ChatGPT Integration: Leveraging **Python**, **Azure OpenAI**, and **Azure Cognitive Search**, the platform supports natural-language queries over product data and    PDF manuals.   Users can ask about features, specifications, pricing and user manual answers using semantic vector search and hybrid search.
+- Deployed on **AKS** using **Flux** **GitOps** and Azure infrastructure provisioned via **Terraform** (CICD-Templates + terraform-modules).  
+- CI builds images, pushes to **ACR**, and updates the GitOps repo; Flux reconciles cluster state.
 
 ## 🔗 Repository Links
 
