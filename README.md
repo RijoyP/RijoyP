@@ -250,6 +250,18 @@ Azure OpenAI resource with Embedding deployment
 
 Python 3.9+
 
+🟦 Example usage:
+
+You can ask about the products in application, for example:
+
+“What is the price of the IPhone 17 Pro Max?”
+
+“Compare iPhone 16e and iPhone 17”
+
+“Show me Samsung phones under 5000.”
+
+“Tell me the battery details of iPhone models.”
+
 ---
 
 ### 1. Catalog API
