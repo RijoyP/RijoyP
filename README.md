@@ -222,6 +222,7 @@ Order microservices follow Clean Architecture principles with clear separation o
 └──────────┘
 
 ```
+---
 
 **Azure Cognitive Search + Azure OpenAI Integration**
 
@@ -248,6 +249,8 @@ Azure Cognitive Search (Basic tier or higher)
 Azure OpenAI resource with Embedding deployment
 
 Python 3.9+
+
+---
 
 ### 1. Catalog API
 
