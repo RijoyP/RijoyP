@@ -39,6 +39,7 @@ Summary
 | Basket API (ASP.NET Core 8.0) | https://basket.4.220.41.138.nip.io/swagger/index.html |
 | Order API (ASP.NET Core 8.0) | https://order.4.220.41.138.nip.io/swagger/index.html |
 | Customer API (Java : Maven) | https://customer.4.220.41.138.nip.io/swagger-ui/index.html |
+| Chat API (Python) | https://chatgptrag.4.220.41.138.nip.io/docs |
 
 # eShop Microservices - High Level Design
 
@@ -222,6 +223,31 @@ Order microservices follow Clean Architecture principles with clear separation o
 
 ```
 
+**Azure Cognitive Search + Azure OpenAI Integration**
+
+This project integrates Azure Cognitive Search with Azure OpenAI embeddings to enable vector search and hybrid search for product data and PDF manuals.
+
+**📌 Features**
+
+Create/update Cognitive Search index with vector search (HNSW)
+
+Generate embeddings using Azure OpenAI
+
+Upload product and PDF chunk documents into Azure Search
+
+Perform pure vector search and hybrid search (keyword + vector)
+
+Extract, chunk, embed, and index PDF manuals
+
+**⚙️ Prerequisites**
+
+Azure Subscription
+
+Azure Cognitive Search (Basic tier or higher)
+
+Azure OpenAI resource with Embedding deployment
+
+Python 3.9+
 
 ### 1. Catalog API
 
