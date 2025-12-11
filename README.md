@@ -251,6 +251,12 @@ Azure OpenAI resource with Embedding deployment
 
 Python 3.9+
 
+**Pdf Data Source**
+
+[IPhone16 User Manual](https://github.com/RijoyP/RijoyP/blob/main/assets/iphone16pro.pdf)
+
+[Readme Document](https://github.com/RijoyP/RijoyP/blob/main/assets/gitreporeadme.pdf)
+
 🟦 Example usage:
 
 You can ask about the products in application, for example:
