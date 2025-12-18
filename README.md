@@ -227,7 +227,22 @@ Order microservices follow Clean Architecture principles with clear separation o
 
 **Azure Cognitive Search + Azure OpenAI Integration**
 
-This project integrates Azure Cognitive Search with Azure OpenAI embeddings to enable vector search and hybrid search for product data and PDF manuals.
+**Overview**
+
+This project implements a serverless ingestion platform using Azure Functions to process both:
+
+Structured product data (event-driven ingestion)
+
+Unstructured user manuals (document-based ingestion)
+
+The ingested data is indexed into Azure Cognitive Search and enriched with embeddings from Azure OpenAI, enabling AI-powered search and Q&A using a Retrieval-Augmented Generation (RAG) pattern.
+
+Ingestion Types
+Ingestion Type	Trigger	Data Type
+Product Ingestion	Azure Service Bus Queue	Structured JSON
+User Manual Ingestion	Azure Blob Storage Upload	PDF / Documents
+
+Both ingestion pipelines run inside the same Azure Function App, but as separate functions.
 
 **📌 Features**
 
@@ -257,48 +272,37 @@ Python 3.9+
 
 [Readme Document](https://github.com/RijoyP/RijoyP/blob/main/assets/gitreporeadme.pdf)
 
-AI-Powered Ingestion Platform
+**AI-Powered Ingestion Platform**
 
 Azure Functions · Azure Service Bus · Azure Storage · Azure Cognitive Search · Azure OpenAI
 
-Overview
-
-This project implements a serverless ingestion platform using Azure Functions to process both:
-
-Structured product data (event-driven ingestion)
-
-Unstructured user manuals (document-based ingestion)
-
-The ingested data is indexed into Azure Cognitive Search and enriched with embeddings from Azure OpenAI, enabling AI-powered search and Q&A using a Retrieval-Augmented Generation (RAG) pattern.
-
-Ingestion Types
-Ingestion Type	Trigger	Data Type
-Product Ingestion	Azure Service Bus Queue	Structured JSON
-User Manual Ingestion	Azure Blob Storage Upload	PDF / Documents
-
-Both ingestion pipelines run inside the same Azure Function App, but as separate functions.
-
 **High-Level Architecture**
-                ┌────────────────────┐
-                │   Product Source   │
-                └─────────┬──────────┘
-                          │
-                          ▼
-              ┌───────────────────────┐
-              │   Azure Service Bus   │
-              │   (product-created)   │
-              └───────────┬───────────┘
-                          │
-                          ▼
-          ┌────────────────────────────────┐
-          │ Azure Function: product_ingest │
-          └───────────────┬────────────────┘
-                          │
-                          ▼
-                Azure Cognitive Search
-                          │
-                          ▼
-                     Azure OpenAI
+
+```
+            ┌────────────────────┐
+            │   Product Source   │
+            └─────────┬──────────┘
+                      │
+                      ▼
+          ┌───────────────────────┐
+          │   Azure Service Bus   │
+          │   (product-created)   │
+          └───────────┬───────────┘
+                      │
+                      ▼
+      ┌────────────────────────────────┐
+      │ Azure Function: product_ingest │
+      └───────────────┬────────────────┘
+                      │
+                      ▼
+            Azure Cognitive Search
+                      │
+                      ▼
+                Azure OpenAI
+
+```
+
+```
 
            User Uploads Manual (PDF)
                      │
@@ -314,6 +318,7 @@ Both ingestion pipelines run inside the same Azure Function App, but as separate
            Azure Cognitive Search
                      │
                 Azure OpenAI
+```
 
 1️⃣ **Product Ingestion Flow (Service Bus → Azure Function)**
 Purpose
@@ -324,6 +329,7 @@ Ingest structured product data asynchronously using an event-driven architecture
 
 Product events are sent to an Azure Service Bus Queue (product-created-queue).
 
+```
 Example Product Message
 {
   "ProductId": "1001",
@@ -332,6 +338,8 @@ Example Product Message
   "Price": 149.99,
   "ImageFile": "headphones.png"
 }
+
+```
 
 **Step 2: Azure Function Triggered**
 
@@ -383,8 +391,11 @@ Step 1: Manual Uploaded to Blob Storage**
 
 Users upload manuals to a specific Azure Blob container (e.g., manuals).
 
+```
 manuals/
  └── iphone16-user-guide.pdf
+
+```
 
 **Step 2: Azure Function Triggered**
 
