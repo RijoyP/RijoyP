@@ -257,17 +257,232 @@ Python 3.9+
 
 [Readme Document](https://github.com/RijoyP/RijoyP/blob/main/assets/gitreporeadme.pdf)
 
-🟦 Example usage:
+AI-Powered Ingestion Platform
 
-You can ask about the products in application, for example:
+Azure Functions · Azure Service Bus · Azure Storage · Azure Cognitive Search · Azure OpenAI
 
-“What is the price of the IPhone 17 Pro Max?”
+Overview
 
-“Compare iPhone 16e and iPhone 17”
+This project implements a serverless ingestion platform using Azure Functions to process both:
 
-“Show me Samsung phones under 5000.”
+Structured product data (event-driven ingestion)
 
-“Tell me the battery details of iPhone models.”
+Unstructured user manuals (document-based ingestion)
+
+The ingested data is indexed into Azure Cognitive Search and enriched with embeddings from Azure OpenAI, enabling AI-powered search and Q&A using a Retrieval-Augmented Generation (RAG) pattern.
+
+Ingestion Types
+Ingestion Type	Trigger	Data Type
+Product Ingestion	Azure Service Bus Queue	Structured JSON
+User Manual Ingestion	Azure Blob Storage Upload	PDF / Documents
+
+Both ingestion pipelines run inside the same Azure Function App, but as separate functions.
+
+**High-Level Architecture**
+                ┌────────────────────┐
+                │   Product Source   │
+                └─────────┬──────────┘
+                          │
+                          ▼
+              ┌───────────────────────┐
+              │   Azure Service Bus   │
+              │   (product-created)   │
+              └───────────┬───────────┘
+                          │
+                          ▼
+          ┌────────────────────────────────┐
+          │ Azure Function: product_ingest │
+          └───────────────┬────────────────┘
+                          │
+                          ▼
+                Azure Cognitive Search
+                          │
+                          ▼
+                     Azure OpenAI
+
+           User Uploads Manual (PDF)
+                     │
+                     ▼
+             Azure Blob Storage
+                     │
+                     ▼
+      ┌───────────────────────────────┐
+      │ Azure Function: manual_ingest │
+      └──────────────┬────────────────┘
+                     │
+                     ▼
+           Azure Cognitive Search
+                     │
+                Azure OpenAI
+
+1️⃣ **Product Ingestion Flow (Service Bus → Azure Function)**
+Purpose
+
+Ingest structured product data asynchronously using an event-driven architecture.
+
+**Step 1: Product Data Published to Service Bus**
+
+Product events are sent to an Azure Service Bus Queue (product-created-queue).
+
+Example Product Message
+{
+  "ProductId": "1001",
+  "Name": "Wireless Headphones",
+  "Description": "Noise cancelling wireless headphones",
+  "Price": 149.99,
+  "ImageFile": "headphones.png"
+}
+
+**Step 2: Azure Function Triggered**
+
+The product_ingest Azure Function is triggered automatically when a new message arrives.
+
+Responsibilities
+
+Deserialize product message
+
+Build searchable content
+
+Generate vector embeddings using Azure OpenAI
+
+Index product data into Azure Cognitive Search
+
+Product Ingestion Function (Conceptual)
+def main(msg: func.ServiceBusMessage):
+    product = json.loads(msg.get_body().decode("utf-8"))
+
+    content = f"{product['Name']} {product.get('Description', '')}"
+    embedding = generate_embedding(content)
+
+    document = {
+        "id": f"prod_{product['ProductId']}",
+        "content": content,
+        "embedding": embedding
+    }
+
+    product_search_service.upload_documents([document])
+
+Output
+
+Product documents indexed into Cognitive Search
+
+Searchable via filters, keyword search, and semantic AI queries
+
+2️⃣ **User Manual Ingestion Flow (Blob Storage → Azure Function)**
+Purpose
+
+Ingest unstructured documents such as:
+
+User manuals
+
+PDFs
+
+Technical documentation
+**
+Step 1: Manual Uploaded to Blob Storage**
+
+Users upload manuals to a specific Azure Blob container (e.g., manuals).
+
+manuals/
+ └── iphone16-user-guide.pdf
+
+**Step 2: Azure Function Triggered**
+
+The manual_ingest Azure Function is triggered by a Blob Storage event.
+
+Responsibilities
+
+Read uploaded document
+
+Extract text from PDF
+
+Split text into chunks
+
+Generate embeddings per chunk using Azure OpenAI
+
+Index chunks into Azure Cognitive Search
+
+Manual Ingestion Function (Conceptual)
+def main(blob: bytes, name: str):
+    text = extract_text_from_pdf(blob)
+
+    documents = []
+    for i, chunk in enumerate(chunk_text(text)):
+        documents.append({
+            "id": f"{name}_chunk_{i}",
+            "content": chunk,
+            "embedding": generate_embedding(chunk)
+        })
+
+    manual_search_service.upload_documents(documents)
+
+Output
+
+Manuals indexed as multiple searchable chunks
+
+Enables semantic and contextual search across documents
+
+3️⃣** Azure Cognitive Search Indexes**
+
+Two separate indexes are used:
+
+Index Name	Content
+product-index	Product metadata & descriptions
+manual-index	Chunked user manual content
+
+Each index stores:
+
+Content
+
+Metadata
+
+Vector embeddings
+
+4️⃣** Azure OpenAI Integration (RAG)**
+
+Azure OpenAI is used to:
+
+Generate embeddings during ingestion
+
+Answer user queries using retrieved documents
+
+Example Query
+
+“How do I reset the wireless headphones?”
+
+Azure OpenAI retrieves relevant chunks from manual-index and generates a contextual answer.
+
+Key Benefits
+
+Single Azure Function App with multiple ingestion triggers
+
+Event-driven and scalable
+
+Supports both structured and unstructured data
+
+AI-powered search and Q&A
+
+Production-ready architecture
+
+Reliability & Scalability
+
+Azure Service Bus ensures message durability
+
+Azure Functions auto-scale based on load
+
+Blob-triggered ingestion handles large files
+
+Dead-letter queues support retry and error handling
+
+**Summary**
+
+This solution demonstrates a complete AI ingestion pipeline where:
+
+Products are ingested via Service Bus–triggered Azure Functions
+
+User manuals are ingested via Blob-triggered Azure Functions
+
+Data is indexed in Azure Cognitive Search
 
 ---
 
