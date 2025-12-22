@@ -526,11 +526,11 @@ Data is indexed in Azure Cognitive Search
 - Ensures reliable, eventually consistent integration with other services.
 
 **4. Azure Service Bus**
-- Used for decoupled, reliable event delivery to downstream services (e.g., inventory, search, analytics).
+- Used for decoupled, reliable event delivery to downstream services.
 
 **5. Azure Blob Storage**
-- Product manuals and images are uploaded and stored securely.
-- Supports direct upload via SAS or server-side streaming.
+- Product manuals are uploaded and stored securely.
+
 ---
 
 ### 2. Basket API
