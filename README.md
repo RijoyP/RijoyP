@@ -510,25 +510,25 @@ Data is indexed in Azure Cognitive Search
 
 **Why PostgreSQL?** Complex queries, JSON support, full-text search, ACID compliance for inventory
 
-## Architecture Overview
+# Architecture Overview
 
-### 1. Unit of Work
+# 1. Unit of Work
 - Ensures all changes to the database (via Marten/PostgreSQL) are committed atomically.
 - Used for transactional consistency across product and outbox message storage.
 
-### 2. Outbox Pattern
+# 2. Outbox Pattern
 - Domain events (e.g., `ProductCreated`) are stored in an Outbox table as part of the same transaction as business data.
 - Guarantees that events are only published if the transaction commits.
 
-### 3. Background Service
+# 3. Background Service
 - A hosted service scans the Outbox table for unprocessed messages.
 - Publishes events to Azure Service Bus and marks them as processed.
 - Ensures reliable, eventually consistent integration with other services.
 
-### 4. Azure Service Bus
+# 4. Azure Service Bus
 - Used for decoupled, reliable event delivery to downstream services (e.g., inventory, search, analytics).
 
-### 5. Azure Blob Storage
+# 5. Azure Blob Storage
 - Product manuals and images are uploaded and stored securely.
 - Supports direct upload via SAS or server-side streaming.
 ---
