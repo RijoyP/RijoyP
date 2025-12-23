@@ -501,7 +501,12 @@ Data is indexed in Azure Cognitive Search
 
 **Purpose**: Product catalog and inventory management
 
-**Tech Stack**: ASP.NET Core (.NET 8) + PostgreSQL + Redis
+**Tech Stack**:
+- **Backend:** ASP.NET Core (.NET 8)
+- **Database:** PostgreSQL (with Marten for document/event storage)
+- **Messaging:** Azure Service Bus (Product Data)
+- **Blob Storage:** Azure Storage Account (for product manuals/files)
+- **Background Processing:** Hosted Service (Outbox pattern)
 
 **Key Responsibilities:**
 - Product and category management
