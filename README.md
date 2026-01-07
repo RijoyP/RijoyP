@@ -63,7 +63,7 @@ eShop Microservices is a production-grade distributed e-commerce system demonstr
 
 ### High-Level System Architecture
 
-![Project Diagram](https://github.com/RijoyP/RijoyP/blob/main/assets/eshopmicroservicesnew.png)
+![Project Diagram](https://github.com/RijoyP/RijoyP/blob/main/assets/eshopmicroserviceslatest.png)
 
 ---
 
@@ -624,11 +624,11 @@ Core domain concepts:
 
 **Integration Patterns:**
 
-🔄 Workflow Details (Event-Driven Messaging with RabbitMQ)
+🔄 **Workflow Details (Event-Driven Messaging with RabbitMQ)**
 
 This system follows an asynchronous event-driven workflow using RabbitMQ as the message broker and MassTransit for message orchestration.
 
-1️⃣ Basket Checkout Workflow
+1️⃣ **Basket Checkout Workflow**
 
 Producer: Basket API
 Exchange: basket-checkout (fanout/topic – MassTransit managed)
@@ -647,7 +647,7 @@ Event Published:
 
 BasketCheckoutEvent
 
-2️⃣ Order Creation Workflow
+2️⃣ **Order Creation Workflow**
 
 Consumer: Order API
 Queue: order-basket-checkout-queue
@@ -662,7 +662,7 @@ Order is persisted with Pending status.
 
 Order aggregate raises OrderCreated domain event.
 
-3️⃣ Order → Payment Workflow
+3️⃣ **Order → Payment Workflow**
 
 Producer: Order API
 Exchange: order-payment
@@ -677,7 +677,7 @@ Event Published:
 
 OrderPaymentEvent
 
-4️⃣ Payment Processing Workflow
+4️⃣ **Payment Processing Workflow**
 
 Consumer: Payment API
 Queue: payment-order-created-queue
@@ -696,7 +696,7 @@ Success → PaymentCompletedEvent
 
 Failure → PaymentFailedEvent
 
-5️⃣ Order Status Update Workflow
+5️⃣ **Order Status Update Workflow**
 
 Consumer: Order API
 Queues:
