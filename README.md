@@ -624,6 +624,140 @@ Core domain concepts:
 
 **Integration Patterns:**
 
+🔄 Workflow Details (Event-Driven Messaging with RabbitMQ)
+
+This system follows an asynchronous event-driven workflow using RabbitMQ as the message broker and MassTransit for message orchestration.
+
+1️⃣ Basket Checkout Workflow
+
+Producer: Basket API
+Exchange: basket-checkout (fanout/topic – MassTransit managed)
+
+Steps:
+
+User initiates checkout from Basket API.
+
+Basket API validates basket and user data.
+
+Basket API publishes BasketCheckoutEvent to RabbitMQ.
+
+Basket data is deleted after successful publish.
+
+Event Published:
+
+BasketCheckoutEvent
+
+2️⃣ Order Creation Workflow
+
+Consumer: Order API
+Queue: order-basket-checkout-queue
+
+Steps:
+
+Order API consumes BasketCheckoutEvent.
+
+Event is mapped to CreateOrderCommand.
+
+Order is persisted with Pending status.
+
+Order aggregate raises OrderCreated domain event.
+
+3️⃣ Order → Payment Workflow
+
+Producer: Order API
+Exchange: order-payment
+
+Steps:
+
+OrderCreated domain event is handled internally.
+
+Order API publishes OrderPaymentEvent to RabbitMQ (feature-flag controlled).
+
+Event Published:
+
+OrderPaymentEvent
+
+4️⃣ Payment Processing Workflow
+
+Consumer: Payment API
+Queue: payment-order-created-queue
+
+Steps:
+
+Payment API consumes OrderPaymentEvent.
+
+Payment details are validated.
+
+Payment is processed (simulated gateway).
+
+Payment result is determined:
+
+Success → PaymentCompletedEvent
+
+Failure → PaymentFailedEvent
+
+5️⃣ Order Status Update Workflow
+
+Consumer: Order API
+Queues:
+
+order-payment-completed-queue
+
+order-payment-failed-queue
+
+Steps:
+
+Order API consumes payment result events.
+
+Order status is updated:
+
+Completed → on PaymentCompletedEvent
+
+Cancelled → on PaymentFailedEvent
+
+```
+┌─────────────────────────────────────────────────────────┐
+│ ┌────────────┐                                          │
+│ │ Basket API │                                          │
+│ └─────┬──────┘                                          │
+│       │  BasketCheckoutEvent                            │
+│       ▼                                                 │
+│ ┌──────────────────────┐                                │
+│ │ RabbitMQ Exchange    │                                │
+│ │ basket-checkout      │                                │
+│ └─────┬────────────────┘                                │
+│       │                                                 │
+│       ▼                                                 │
+│ ┌────────────┐                                          │
+│ │ Order API  │                                          │ 
+│ └─────┬──────┘                                          │
+│       │  OrderPaymentEvent                              │
+│       ▼                                                 │
+│ ┌──────────────────────┐                                │
+│ │ RabbitMQ Exchange    │                                │
+│ │ order-payment        │                                │
+│ └─────┬────────────────┘                                │
+│       │                                                 │
+│       ▼                                                 │
+│ ┌────────────┐                                          │
+│ │ Payment API│                                          │
+│ └─────┬──────┘                                          │
+│       │  PaymentCompletedEvent /                        │
+│       │  PaymentFailedEvent                             │
+│       ▼                                                 │
+│ ┌──────────────────────────┐                            │
+│ │ RabbitMQ Exchange        │                            │
+│ │ payment-status           │                            │
+│ └─────┬────────────────────┘                            │
+│       │                                                 │
+│       ▼                                                 │
+│ ┌────────────┐                                          │
+│ │ Order API  │                                          │
+│ └────────────┘                                          │
+└─────────────────────────────────────────────────────────┘
+
+```
+
 **Catalog → Ordering**
 - Ordering translates Catalog models to its own domain objects
 - Prevents breaking changes from cascading
