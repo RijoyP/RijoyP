@@ -1,6 +1,3 @@
-**Please Visit My Personal Page**
-https://myprofile.4.220.41.138.nip.io
-
 # eShopMicroServices — High Level Architecture & Service Responsibilities
 
 Summary
