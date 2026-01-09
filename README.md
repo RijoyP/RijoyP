@@ -21,6 +21,8 @@ Summary
 
 ## 🔗 Infra Monitoring / Logging / Tracing / Messaging Urls Links
 
+**I have deleted the azure resources due to the heavy price**
+
 | Resource | Url |
 |------------|---------|
 | Jaeger | http://jaeger.20.251.183.221.nip.io/ | 
@@ -39,6 +41,7 @@ Summary
 | Discount API (ASP.NET Core 8.0) | https://discount.4.220.41.138.nip.io/swagger/index.html | 
 | Basket API (ASP.NET Core 8.0) | https://basket.4.220.41.138.nip.io/swagger/index.html |
 | Order API (ASP.NET Core 8.0) | https://order.4.220.41.138.nip.io/swagger/index.html |
+| Payment API (ASP.NET Core 9.0) | https://payment.4.220.41.138.nip.io/swagger/index.html |
 | Customer API (Java : Maven) | https://customer.4.220.41.138.nip.io/swagger-ui/index.html |
 | Chat API (Python) | https://chatgptrag.4.220.41.138.nip.io/docs |
 
@@ -49,7 +52,7 @@ Summary
 eShop Microservices is a production-grade distributed e-commerce system demonstrating modern cloud-native patterns and practices.
 
 **Technology Stack:**
-- **.NET 8** - Backend microservices
+- **.NET 9** - Backend microservices
 - **Azure Application Gateway** - API Gateway with Azure AD authentication
 - **Docker & AKS** - Containerization and orchestration
 - **FluxCD** - GitOps continuous delivery
