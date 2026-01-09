@@ -19,9 +19,9 @@ Summary
 | [CICD-Templates](https://github.com/RijoyP/CICD-Templates) | Reusable pipeline templates |
 | [helm-templates](https://github.com/RijoyP/helm-templates) | Helm chart boilerplate |
 
-## 🔗 Infra Monitoring / Logging / Tracing / Messaging Urls Links
+**I have deleted the Azure resources due to high costs, so the links below are no longer accessible**
 
-**I have deleted the azure resources due to the heavy price**
+## 🔗 Infra Monitoring / Logging / Tracing / Messaging Urls Links
 
 | Resource | Url |
 |------------|---------|
