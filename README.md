@@ -16,6 +16,19 @@ Summary
 | [CICD-Templates](https://github.com/RijoyP/CICD-Templates) | Reusable pipeline templates |
 | [helm-templates](https://github.com/RijoyP/helm-templates) | Helm chart boilerplate |
 
+## 🔗 Backend Urls Links
+
+| Backend | Urls |
+|------------|---------|
+| Front End React (React Typescript) | https://eshopreact.4.187.236.253.nip.io/ | 
+| Catatlog API (ASP.NET Core 8.0) | https://catalog.4.187.236.253.nip.io/swagger/index.html | 
+| Discount API (ASP.NET Core 8.0) | https://discount.4.187.236.253.nip.io/swagger/index.html | 
+| Basket API (ASP.NET Core 8.0) | https://basket.4.187.236.253.nip.io/swagger/index.html |
+| Order API (ASP.NET Core 8.0) | https://order.4.187.236.253.nip.io/swagger/index.html |
+| Payment API (ASP.NET Core 9.0) | https://payment.4.187.236.253.nip.io/swagger/index.html |
+| Customer API (Java : Maven) | https://customer.4.187.236.253.nip.io/swagger-ui/index.html |
+| Chat API (Python) | https://chatgptrag.4.187.236.253.nip.io/docs |
+
 **I have deleted the Azure resources due to high costs, so the links below are no longer accessible**
 
 ## 🔗 Infra Monitoring / Logging / Tracing / Messaging Urls Links
@@ -28,19 +41,6 @@ Summary
 | Prometheus | http://prometheus.20.251.183.221.nip.io/ | 
 | Zipkin | http://zipkin.20.251.183.221.nip.io/ | 
 | Rabbit MQ | http://rabbitmq.20.251.183.221.nip.io/ | 
-
-## 🔗 Backend Urls Links
-
-| Backend | Urls |
-|------------|---------|
-| Front End React (React Typescript) | https://eshopreact.4.220.41.138.nip.io/ | 
-| Catatlog API (ASP.NET Core 8.0) | https://catalog.4.220.41.138.nip.io/swagger/index.html | 
-| Discount API (ASP.NET Core 8.0) | https://discount.4.220.41.138.nip.io/swagger/index.html | 
-| Basket API (ASP.NET Core 8.0) | https://basket.4.220.41.138.nip.io/swagger/index.html |
-| Order API (ASP.NET Core 8.0) | https://order.4.220.41.138.nip.io/swagger/index.html |
-| Payment API (ASP.NET Core 9.0) | https://payment.4.220.41.138.nip.io/swagger/index.html |
-| Customer API (Java : Maven) | https://customer.4.220.41.138.nip.io/swagger-ui/index.html |
-| Chat API (Python) | https://chatgptrag.4.220.41.138.nip.io/docs |
 
 # eShop Microservices - High Level Design
 
