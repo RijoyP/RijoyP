@@ -16,6 +16,8 @@ Summary
 | [CICD-Templates](https://github.com/RijoyP/CICD-Templates) | Reusable pipeline templates |
 | [helm-templates](https://github.com/RijoyP/helm-templates) | Helm chart boilerplate |
 
+**Chat is not wokring, I have deployed in the Azure free subscription**
+
 ## 🔗 Backend Urls Links
 
 | Backend | Urls |
