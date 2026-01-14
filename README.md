@@ -624,6 +624,8 @@ Core domain concepts:
 └─────────────────────────────────────────────────────────┘
 ```
 
+---
+
 **Integration Patterns:**
 
 🛒 **E-Commerce Order Processing**
@@ -838,6 +840,8 @@ This system demonstrates a clean, scalable, and production-ready implementation 
 **Event-driven microservices**
 
 It is exactly how modern e-commerce platforms handle orders at scale.
+
+---
 
 ```
 
