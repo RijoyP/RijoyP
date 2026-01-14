@@ -689,7 +689,9 @@ No shared “service layer”
 High cohesion, low coupling
 
 🔁 **End-to-End Flow (Happy Path)**
+
 🟢 **Order Success Flow**
+
 **sequenceDiagram**
     participant Basket
     participant Order
@@ -717,7 +719,9 @@ High cohesion, low coupling
     Order->>Order: Complete Saga
 
 ❌ **Failure Handling (Saga Compensation)**
+
 🔴 **Inventory Failure**
+
 **sequenceDiagram**
     participant Inventory
     participant RabbitMQ
@@ -732,6 +736,7 @@ High cohesion, low coupling
     Order->>Order: Cancel Order
 
 🔴 **Payment Failure**
+
 **sequenceDiagram**
     participant Payment
     participant Inventory
