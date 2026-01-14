@@ -694,6 +694,8 @@ High cohesion, low coupling
 
 🟢 **Order Success Flow**
 
+```
+
 **sequenceDiagram**
     participant Basket
     participant Order
@@ -719,11 +721,13 @@ High cohesion, low coupling
 
     RabbitMQ->>Order: InventoryConfirmedEvent
     Order->>Order: Complete Saga
+```
 
 ❌ **Failure Handling (Saga Compensation)**
 
 🔴 **Inventory Failure**
 
+```
 **sequenceDiagram**
     participant Inventory
     participant RabbitMQ
@@ -737,9 +741,13 @@ High cohesion, low coupling
     RabbitMQ->>Order: OrderFailedEvent
     Order->>Order: Cancel Order
 
+```
+
 🔴 **Payment Failure**
 
 **sequenceDiagram**
+
+```
     participant Payment
     participant Inventory
     participant Order
@@ -753,6 +761,8 @@ High cohesion, low coupling
 
     RabbitMQ->>Order: OrderFailedEvent
     Order->>Order: Cancel Saga
+
+```
 
 📦 **Transactional Outbox (Key Concept)**
 **Why Outbox?**
@@ -773,6 +783,8 @@ Mark as processed or errored
 
 🧠 **Saga Orchestrator (Order Service)**
 
+```
+
 The OrderSagaOrchestrator controls state transitions:
 
 Started
@@ -783,6 +795,7 @@ InventoryReserved
   ↓
 Completed / Failed
 
+```
 
 **Responsibilities:**
 
