@@ -651,7 +651,9 @@ Inventory API	Reserve / Confirm inventory
 Payment API	Process payments
 RabbitMQ	Event transport
 Outbox Dispatcher	Reliable event publishing
+
 🧠 **Architectural Patterns Used**
+
 1️⃣ **Saga Orchestration**
 
 Order Service acts as the Saga Orchestrator
