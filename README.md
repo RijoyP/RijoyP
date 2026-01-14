@@ -626,137 +626,211 @@ Core domain concepts:
 
 **Integration Patterns:**
 
-🔄 **Workflow Details (Event-Driven Messaging with RabbitMQ)**
+🛒 **E-Commerce Order Processing**
+**Saga Orchestration with Transactional Outbox**
 
-This system follows an asynchronous event-driven workflow using RabbitMQ as the message broker and MassTransit for message orchestration.
+This repository demonstrates a real-world distributed transaction implemented using:
 
-1️⃣ **Basket Checkout Workflow**
+**Saga Orchestration**
 
-Producer: Basket API
-Exchange: basket-checkout (fanout/topic – MassTransit managed)
+**Transactional Outbox Pattern**
 
-Steps:
+**CQRS + Vertical Slice Architecture**
 
-User initiates checkout from Basket API.
+**MassTransit + RabbitMQ**
 
-Basket API validates basket and user data.
+**.NET + MediatR**
 
-Basket API publishes BasketCheckoutEvent to RabbitMQ.
+The system guarantees data consistency across multiple microservices without distributed transactions (2PC).
 
-Basket data is deleted after successful publish.
+🧩 **Services Overview**
+Service	Responsibility
+Basket API	Checkout basket & initiate order
+Order API	Create and manage orders + Saga orchestration
+Inventory API	Reserve / Confirm inventory
+Payment API	Process payments
+RabbitMQ	Event transport
+Outbox Dispatcher	Reliable event publishing
+🧠 **Architectural Patterns Used**
+1️⃣ **Saga Orchestration**
 
-Event Published:
+Order Service acts as the Saga Orchestrator
 
-BasketCheckoutEvent
+Coordinates Inventory → Payment → Confirmation
 
-2️⃣ **Order Creation Workflow**
+Handles failure & compensation
 
-Consumer: Order API
-Queue: order-basket-checkout-queue
+2️⃣ **Transactional Outbox**
 
-Steps:
+Each service writes events to a local Outbox table
 
-Order API consumes BasketCheckoutEvent.
+A background dispatcher publishes events to RabbitMQ
 
-Event is mapped to CreateOrderCommand.
+Guarantees exactly-once message delivery
 
-Order is persisted with Pending status.
+3️⃣ **Vertical Slice Architecture**
 
-Order aggregate raises OrderCreated domain event.
+Each feature contains:
 
-3️⃣ **Order → Payment Workflow**
+Endpoint
 
-Producer: Order API
-Exchange: order-payment
+Command
 
-Steps:
+Handler
 
-OrderCreated domain event is handled internally.
+Validator
 
-Order API publishes OrderPaymentEvent to RabbitMQ (feature-flag controlled).
+Events
 
-Event Published:
+No shared “service layer”
 
-OrderPaymentEvent
+High cohesion, low coupling
 
-4️⃣ **Payment Processing Workflow**
+🔁 **End-to-End Flow (Happy Path)**
+🟢 **Order Success Flow**
+**sequenceDiagram**
+    participant Basket
+    participant Order
+    participant Inventory
+    participant Payment
+    participant RabbitMQ
 
-Consumer: Payment API
-Queue: payment-order-created-queue
+    Basket->>Order: BasketCheckoutEvent
+    Order->>Order: CreateOrder
+    Order->>RabbitMQ: OrderCreatedEvent (via Outbox)
 
-Steps:
+    RabbitMQ->>Inventory: OrderCreatedEvent
+    Inventory->>Inventory: Reserve Stock
+    Inventory->>RabbitMQ: InventoryReservedEvent (via Outbox)
 
-Payment API consumes OrderPaymentEvent.
+    RabbitMQ->>Payment: InventoryReservedEvent
+    Payment->>Payment: Process Payment
+    Payment->>RabbitMQ: PaymentCompletedEvent (via Outbox)
 
-Payment details are validated.
+    RabbitMQ->>Inventory: PaymentCompletedEvent
+    Inventory->>Inventory: Confirm Inventory
+    Inventory->>RabbitMQ: InventoryConfirmedEvent
 
-Payment is processed (simulated gateway).
+    RabbitMQ->>Order: InventoryConfirmedEvent
+    Order->>Order: Complete Saga
 
-Payment result is determined:
+❌ **Failure Handling (Saga Compensation)**
+🔴 **Inventory Failure**
+**sequenceDiagram**
+    participant Inventory
+    participant RabbitMQ
+    participant Order
 
-Success → PaymentCompletedEvent
+    Inventory->>Inventory: Reserve Item A (Success)
+    Inventory->>Inventory: Reserve Item B (Fail)
+    Inventory->>Inventory: Release Item A (Compensation)
+    Inventory->>RabbitMQ: OrderFailedEvent
 
-Failure → PaymentFailedEvent
+    RabbitMQ->>Order: OrderFailedEvent
+    Order->>Order: Cancel Order
 
-5️⃣ **Order Status Update Workflow**
+🔴 **Payment Failure**
+**sequenceDiagram**
+    participant Payment
+    participant Inventory
+    participant Order
+    participant RabbitMQ
 
-Consumer: Order API
-Queues:
+    Payment->>Payment: Payment Failed
+    Payment->>RabbitMQ: OrderFailedEvent
 
-order-payment-completed-queue
+    RabbitMQ->>Inventory: OrderFailedEvent
+    Inventory->>Inventory: Release Reserved Stock
 
-order-payment-failed-queue
+    RabbitMQ->>Order: OrderFailedEvent
+    Order->>Order: Cancel Saga
 
-Steps:
+📦 **Transactional Outbox (Key Concept)**
+**Why Outbox?**
 
-Order API consumes payment result events.
+Prevents dual-write problem
 
-Order status is updated:
+Guarantees event delivery even on crashes
 
-Completed → on PaymentCompletedEvent
+Enables retry & idempotency
 
-Cancelled → on PaymentFailedEvent
+**Outbox Dispatcher Responsibility**
 
-```
-┌─────────────────────────────────────────────────────────┐
-│ ┌────────────┐                                          │
-│ │ Basket API │                                          │
-│ └─────┬──────┘                                          │
-│       │  BasketCheckoutEvent                            │
-│       ▼                                                 │
-│ ┌──────────────────────┐                                │
-│ │ RabbitMQ Exchange    │                                │
-│ │ basket-checkout      │                                │
-│ └─────┬────────────────┘                                │
-│       │                                                 │
-│       ▼                                                 │
-│ ┌────────────┐                                          │
-│ │ Order API  │                                          │ 
-│ └─────┬──────┘                                          │
-│       │  OrderPaymentEvent                              │
-│       ▼                                                 │
-│ ┌──────────────────────┐                                │
-│ │ RabbitMQ Exchange    │                                │
-│ │ order-payment        │                                │
-│ └─────┬────────────────┘                                │
-│       │                                                 │
-│       ▼                                                 │
-│ ┌────────────┐                                          │
-│ │ Payment API│                                          │
-│ └─────┬──────┘                                          │
-│       │  PaymentCompletedEvent /                        │
-│       │  PaymentFailedEvent                             │
-│       ▼                                                 │
-│ ┌──────────────────────────┐                            │
-│ │ RabbitMQ Exchange        │                            │
-│ │ payment-status           │                            │
-│ └─────┬────────────────────┘                            │
-│       │                                                 │
-│       ▼                                                 │
-│ ┌────────────┐                                          │
-│ │ Order API  │                                          │
-│ └────────────┘                                          │
-└─────────────────────────────────────────────────────────┘
+Read unprocessed messages
+
+Publish to RabbitMQ
+
+Mark as processed or errored
+
+🧠 **Saga Orchestrator (Order Service)**
+
+The OrderSagaOrchestrator controls state transitions:
+
+Started
+  ↓
+PaymentPending
+  ↓
+InventoryReserved
+  ↓
+Completed / Failed
+
+
+**Responsibilities:**
+
+Start saga after order creation
+
+Track progress
+
+Handle success & failure events
+
+Ensure single final outcome
+
+**Benefits**
+
+✅ High cohesion
+✅ Easy testing
+✅ Independent evolution
+✅ No “God services”
+
+🛡️ **Consistency Guarantees**
+Problem	Solution
+Dual writes	Outbox
+Partial failure	Saga compensation
+Message loss	Durable outbox
+Duplicate messages	Idempotent consumers
+Distributed transaction	Saga (No 2PC)
+🧪 Production-Grade Characteristics
+
+✔ Exactly-once event publishing
+
+✔ Eventual consistency
+
+✔ Failure recovery
+
+✔ Retry support
+
+✔ Observability friendly (correlationId ready)
+
+🚀 What This Architecture Avoids
+
+❌ Distributed transactions
+❌ Tight service coupling
+❌ Direct synchronous chaining
+❌ Inconsistent states
+
+📌 **Summary**
+
+This system demonstrates a clean, scalable, and production-ready implementation of:
+
+**Saga Orchestration**
+
+**Transactional Outbox**
+
+**CQRS & Vertical Slice**
+
+**Event-driven microservices**
+
+It is exactly how modern e-commerce platforms handle orders at scale.
 
 ```
 
