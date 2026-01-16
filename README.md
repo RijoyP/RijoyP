@@ -1355,11 +1355,11 @@ Real-time log streaming and alerting
 
 **Zipkin**
 
-![zipkinlist](https://github.com/RijoyP/RijoyP/blob/main/assets/zipkin_list.png)
+![zipkinlist](https://github.com/RijoyP/RijoyP/blob/main/assets/zipkin_list_new.png)
 
-![zipkin](https://github.com/RijoyP/RijoyP/blob/main/assets/zipkin.png)
+![zipkin](https://github.com/RijoyP/RijoyP/blob/main/assets/zipkin_new.png)
 
-![zipkin_flow](https://github.com/RijoyP/RijoyP/blob/main/assets/zipkin_flow.png)
+![zipkin_flow](https://github.com/RijoyP/RijoyP/blob/main/assets/zipkin_flow_new.png)
 
 **Jaeger**
 
