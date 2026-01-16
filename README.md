@@ -233,16 +233,18 @@ Order microservices follow Clean Architecture principles with clear separation o
 
 ---
 
-🛒 E-commerce Microservices Architecture
+🛒 **E-commerce Microservices Architecture**
 
 This repository demonstrates an event-driven e-commerce system using Saga orchestration and the Transactional Outbox pattern 📦🐇 for reliable messaging across microservices.
 
-🌐 Architecture Overview
+All inter-service communication is asynchronous using RabbitMQ 🐇, ensuring loose coupling and eventual consistency.
 
-👨‍💻 Basket API 🛍️
+🌐 **Architecture Overview**
+
+👨‍💻 **Basket API** 🛍️
 On checkout, writes a BasketCheckoutEvent to its outbox 📦.
 
-📦 Order API 🏷️
+📦 **Order API** 🏷️
 
 Consumes BasketCheckoutEvent from RabbitMQ 🐇
 
@@ -250,7 +252,7 @@ Creates the order 📝
 
 Writes OrderCreatedEvent to its outbox 📦
 
-📦 Inventory API 📦
+📦 **Inventory API** 📦
 
 Consumes OrderCreatedEvent from RabbitMQ 🐇
 
@@ -260,23 +262,23 @@ Checks and reserves stock:
 
 ✅ Stock available → Publishes InventoryReservedEvent 📦 → RabbitMQ 🐇 → Payment API 💳
 
-💳 Payment API 💳
+💳 **Payment API** 💳
 
 Consumes InventoryReservedEvent from RabbitMQ 🐇
 
-Processes payment:
+**Processes payment**:
 
 ✅ Success → Publishes PaymentCompletedEvent 📦 → Inventory API 📦
 
 ❌ Failure → Publishes PaymentFailedEvent 📦 → Inventory API (Release stock 📦)
 
-📦 Inventory API (after payment)
+📦 **Inventory API (after payment)**
 
 Consumes PaymentCompletedEvent → Confirms inventory → Publishes InventoryConfirmedEvent 📦 → Order API (Order completed ✅)
 
 Consumes PaymentFailedEvent → Releases inventory → Publishes InventoryFailedEvent 📦 → Order API (Order canceled 🛑)
 
-User Checkout 🛒
+**User Checkout** 🛒
 
 ```
 
@@ -289,18 +291,18 @@ User Checkout 🛒
 
 ```
 
-🧩 Key Features
+🧩 **Key Features**
 
-📦 Transactional Outbox
+📦 **Transactional Outbox**
 Ensures reliable event delivery across microservices.
 
-🧵 Saga Orchestration
+🧵 **Saga Orchestration**
 Coordinates complex transactions with success and failure paths (inventory release, order cancellation) 🛠️♻️.
 
-💡 Idempotent Handlers
+💡 **Idempotent Handlers**
 Supports retry scenarios without creating inconsistent state 🔄.
 
-🗄️ Database Choice
+🗄️ **Database Choice**
 
 Order API → SQL 🗄️
 
@@ -309,7 +311,7 @@ Inventory API → PostgreSQL 🗄️
 Payment API → PostgreSQL 🗄️
 Ensures each microservice persists its own data reliably.
 
-🏗️ Implementation Notes
+🏗️ **Implementation Notes**
 
 All services write events to Outbox instead of publishing directly.
 
