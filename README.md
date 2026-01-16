@@ -230,6 +230,95 @@ Order microservices follow Clean Architecture principles with clear separation o
 └──────────┘
 
 ```
+
+---
+
+🛒 E-commerce Microservices Architecture
+
+This repository demonstrates an event-driven e-commerce system using Saga orchestration and the Transactional Outbox pattern 📦🐇 for reliable messaging across microservices.
+
+🌐 Architecture Overview
+
+👨‍💻 Basket API 🛍️
+On checkout, writes a BasketCheckoutEvent to its outbox 📦.
+
+📦 Order API 🏷️
+
+Consumes BasketCheckoutEvent from RabbitMQ 🐇
+
+Creates the order 📝
+
+Writes OrderCreatedEvent to its outbox 📦
+
+📦 Inventory API 📦
+
+Consumes OrderCreatedEvent from RabbitMQ 🐇
+
+Checks and reserves stock:
+
+❌ Stock unavailable → Publishes InventoryFailedEvent 📦 → RabbitMQ 🐇 → Order API (Order canceled 🛑)
+
+✅ Stock available → Publishes InventoryReservedEvent 📦 → RabbitMQ 🐇 → Payment API 💳
+
+💳 Payment API 💳
+
+Consumes InventoryReservedEvent from RabbitMQ 🐇
+
+Processes payment:
+
+✅ Success → Publishes PaymentCompletedEvent 📦 → Inventory API 📦
+
+❌ Failure → Publishes PaymentFailedEvent 📦 → Inventory API (Release stock 📦)
+
+📦 Inventory API (after payment)
+
+Consumes PaymentCompletedEvent → Confirms inventory → Publishes InventoryConfirmedEvent 📦 → Order API (Order completed ✅)
+
+Consumes PaymentFailedEvent → Releases inventory → Publishes InventoryFailedEvent 📦 → Order API (Order canceled 🛑)
+
+User Checkout 🛒
+
+```
+
+  └─> BasketCheckoutEvent → Outbox 📦 → RabbitMQ 🐇
+       └─> Order API 🏷️ consumes → creates Order 📝 → OrderCreatedEvent → Outbox 📦 → RabbitMQ 🐇
+            └─> Inventory API 📦 consumes → reserves stock
+                  ├─> ✅ Success → InventoryReservedEvent → Outbox 📦 → RabbitMQ 🐇 → Payment API 💳
+                  │     └─> ✅ Payment success → PaymentCompletedEvent → Outbox 📦 → RabbitMQ 🐇 → Inventory API 📦 → InventoryConfirmedEvent → Order API ✅ completes order
+                  └─> ❌ Failure → InventoryFailedEvent → Outbox 📦 → RabbitMQ 🐇 → Order API 🛑 cancels order
+
+```
+
+🧩 Key Features
+
+📦 Transactional Outbox
+Ensures reliable event delivery across microservices.
+
+🧵 Saga Orchestration
+Coordinates complex transactions with success and failure paths (inventory release, order cancellation) 🛠️♻️.
+
+💡 Idempotent Handlers
+Supports retry scenarios without creating inconsistent state 🔄.
+
+🗄️ Database Choice
+
+Order API → SQL 🗄️
+
+Inventory API → PostgreSQL 🗄️
+
+Payment API → PostgreSQL 🗄️
+Ensures each microservice persists its own data reliably.
+
+🏗️ Implementation Notes
+
+All services write events to Outbox instead of publishing directly.
+
+A background OutboxPublisher service reads pending events and sends them to RabbitMQ 🐇.
+
+All downstream services consume events from RabbitMQ and update their state accordingly.
+
+Failure events (payment failed, inventory unavailable) trigger compensating actions automatically.
+
 ---
 
 **Azure Cognitive Search + Azure OpenAI Integration**
