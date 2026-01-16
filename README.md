@@ -282,16 +282,53 @@ Consumes PaymentFailedEvent → Releases inventory → Publishes InventoryFailed
 
 ```
 
-  └─> BasketCheckoutEvent → Outbox 📦 → RabbitMQ 🐇  (Async)
-       └─> Order API 🏷️ consumes → creates Order 📝 → OrderCreatedEvent → Outbox 📦 → RabbitMQ 🐇  (Async)
-            └─> Inventory API 📦 consumes → reserves stock
-                  ├─> ✅ Success → InventoryReservedEvent → Outbox 📦 → RabbitMQ 🐇 → Payment API 💳  (Async)
-                  │     ├─> ✅ Payment success → PaymentCompletedEvent → Outbox 📦 → RabbitMQ 🐇 → Inventory API 📦 → InventoryConfirmedEvent → Order API ✅ completes order
-                  │     └─> ❌ Payment failure → PaymentFailedEvent → Outbox 📦 → RabbitMQ 🐇 → Inventory API 📦 → InventoryFailedEvent → Order API 🛑 cancels order
-                  └─> ❌ Failure → InventoryFailedEvent → Outbox 📦 → RabbitMQ 🐇 → Order API 🛑 cancels order
+                                 ┌───────────────────┐
+                                 │    User Checkout  │
+                                 └──────────┬────────┘
+                                            │
+                                            ▼
+                               ┌─────────────────────────┐
+                               │    BasketCheckoutEvent  │
+                               │   → Outbox  → RabbitMQ  │ (Async)
+                               └─────────────┬───────────┘
+                                             │
+                                             ▼
+                             ┌────────────────────────────┐
+                             │     Order API Consumes     │
+                             │       Creates Order        │
+                             │     → OrderCreatedEvent    │
+                             │     → Outbox  → RabbitMQ   │ (Async)
+                             └───────────────┬────────────┘
+                                             │  
+                                             ▼
+                               ┌────────────────────────┐
+                               │ Inventory API Consumes │
+                               │       Reserves Stock   │
+                               └───────────┬────────────┘
+                                   ┌───────┴──────────┐
+                                   │                  │ 
+                         ✅ Success▼                  ▼ ❌ Failure
+                      ┌───────────────────────┐  ┌──────────────────────────┐
+                      │ InventoryReservedEvent│  │   InventoryFailedEvent   │
+                      │ → Outbox  → RabbitMQ  │  │ → Outbox  → RabbitMQ     │
+                      │     → Payment API     │  │ → Order API Cancels Order│
+                      └────────────┬──────────┘  └──────────────────────────┘
+                                   │
+                                   ▼
+                    ┌─────────────────────────┐
+                    │ Payment API  processes  │
+                    └──────────────┬──────────┘
+                        ┌──────────┴──────────┐
+              ✅ Success▼                     ▼ ❌ Failure
+          ┌───────────────────────────┐  ┌───────────────────────┐
+          │       CompletedEvent      │  │        FailedEvent    │
+          │     → Outbox  → RabbitMQ  │  │ → Outbox  → RabbitMQ  │
+          │     → Inventory API       │  │    → Inventory API    │
+          │  → InventoryConfirmedEvent│  │ → InventoryFailedEvent│
+          │  → Order API Completes    │  │ → Order API  cancels  │
+          └───────────────────────────┘  └───────────────────────┘
 
 ```
-
 🧩 **Key Features**
 
 📦 **Transactional Outbox**
