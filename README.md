@@ -144,25 +144,25 @@ Order microservices follow Clean Architecture principles with clear separation o
 **Admin Azure AD Authentication**
 
 ```
-┌──────────────────────────────────────────────────────────────────┐
-│                         Azure AD B2C Tenant                      │
-│                                                                  │
-│  ┌──────────────┐  ┌───────────────┐  ┌──────────────┐           │
-│  │ Catalog API  │  │  Discount API │  │    React     │           │
-│  │  (Backend)   │  │   (Backend)   │  │  (Frontend)  │           │
-│  │ Roles:       │  │ Roles:        │  │              │           │
-│  │ CatalogWrite │  │ DiscountWrite │  │ Permissions: │           │
-│  │              │  │               │  │ - Catalog    │           │
-│  │ Scopes:      │  │ Scopes:       │  │ - Discount   │           │
-│  │ Catalog.Write│  │ Discount.Write│  │              │           │
-│  └──────────────┘  └───────────────┘  └──────────────┘           │
-│  ┌──────────────┐                    ┌──────────────┐            │
-│  │ Catalog User │                    │ Discount User│            │
-│  │              │                    │              │            │
-│  │ Assigned:    │                    │ Assigned:    │            │
-│  │ CatalogWrite │                    │ DiscountWrite│            │
-│  └──────────────┘                    └──────────────┘            │
-└──────────────────────────────────────────────────────────────────┘
+┌────────────────────────────────────────────────────────────────────────────┐
+│                         Azure AD B2C Tenant                                │
+│                                                                            │
+│  ┌──────────────┐  ┌───────────────┐  ┌───────────────┐ ┌──────────────┐   │
+│  │ Catalog API  │  │  Discount API │  │ Inventory API │ │    React     │   │
+│  │  (Backend)   │  │   (Backend)   │  │   (Backend)   │ │  (Frontend)  │   │
+│  │ Roles:       │  │ Roles:        │  │ Roles:        │ │              │   │
+│  │ CatalogWrite │  │ DiscountWrite │  │InventoryWrite │ │ Permissions: │   │
+│  │              │  │               │  │               │ │ - Catalog    │   │
+│  │ Scopes:      │  │ Scopes:       │  │ Scopes:       │ │ - Discount   │   │
+│  │ Catalog.Write│  │ Discount.Write│  │Inventory.Write│ │              │   │
+│  └──────────────┘  └───────────────┘  └───────────────┘ └──────────────┘   │
+│  ┌──────────────┐  ┌──────────────┐  ┌───────────────┐                     │
+│  │ Catalog User │  │ Discount User│  │ Inventory User│                     │
+│  │              │  │              │  │               │                     │
+│  │ Assigned:    │  │ Assigned:    │  │ Assigned:     │                     │
+│  │ CatalogWrite │  │ DiscountWrite│  │ InventoryWrite│                     │ 
+│  └──────────────┘  └──────────────┘  └───────────────┘                     │
+└────────────────────────────────────────────────────────────────────────────┘
 
 ```
 
