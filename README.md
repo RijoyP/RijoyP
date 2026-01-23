@@ -129,9 +129,13 @@ Order microservices follow Clean Architecture principles with clear separation o
 | Service | Database | Purpose | Key Features |
 |---------|----------|---------|--------------|
 | **Catalog API** | PostgreSQL | Product management | Product CRUD, categories, inventory, search |
-| **Basket API** | PostgreSQL + Redis | Shopping cart | Cart operations, session management, checkout |
-| **Discount API** | SQLite | Promotions | Coupon validation, discount calculation |
+| **Catalog API GRPC** | PostgreSQL | Internal pod communication | Get Product |
+| **Basket API** | PostgreSQL + Redis | Shopping cart | Cart operations, session management and Checkout |
+| **Discount API GRPC** | SQLite | Internal pod communication | Coupon validation, discount calculation |
+| **Discount API** |    | UI Call | Create, Update and Get Coupon |
 | **Ordering API** | SQL Server | Order processing | DDD implementation, order lifecycle, payments |
+| **Inventory API** | PostgreSQL | Inventory Management | Reserve Stock, Confirm Stock and Release Stock |
+| **Payment API** | PostgreSQL | Payment Management | Payment |
 
 **Source Code**: [eShopMicroservices/Services](https://github.com/RijoyP/eShopMicroservices/tree/main/Services)
 
