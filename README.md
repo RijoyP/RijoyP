@@ -33,12 +33,11 @@ Summary
 
 ## 🔗 Tracing and Monitoring Urls Links
 
-| Resource | Url |
+| Resource   | Url |
 |------------|---------|
-
-| Zipkin | http://zipkin.135.235.243.70.nip.io/ | 
-| Rabbit MQ | http://rabbitmq.135.235.243.70.nip.io/ | 
-| Grafana | http://grafana.135.235.243.70.nip.io/ | 
+| Zipkin     | http://zipkin.135.235.243.70.nip.io/ | 
+| Rabbit MQ  | http://rabbitmq.135.235.243.70.nip.io/ | 
+| Grafana    | http://grafana.135.235.243.70.nip.io/ | 
 | Prometheus | http://prometheus.135.235.243.70.nip.io/ | 
 
 **I have deleted the Azure resources due to high costs, so the links below are no longer accessible**
@@ -46,9 +45,9 @@ Summary
 ## 🔗 Infra Monitoring / Logging / Messaging Urls Links
 
 | Resource | Url |
-|------------|---------|
-| Jaeger | http://jaeger.135.235.243.70.nip.io/ | 
-| Kibana | http://kibana.20.251.183.221.nip.io/ | 
+|----------|---------|
+| Jaeger   | http://jaeger.135.235.243.70.nip.io/ | 
+| Kibana   | http://kibana.20.251.183.221.nip.io/ | 
 
 
 # eShop Microservices - High Level Design
