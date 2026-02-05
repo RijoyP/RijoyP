@@ -16,8 +16,6 @@ Summary
 | [CICD-Templates](https://github.com/RijoyP/CICD-Templates) | Reusable pipeline templates |
 | [helm-templates](https://github.com/RijoyP/helm-templates) | Helm chart boilerplate |
 
-**Chat is not wokring, I have deployed in the Azure free subscription**
-
 ## 🔗 Backend Urls Links
 
 | Backend | Urls |
@@ -31,7 +29,7 @@ Summary
 | Customer API (Java : Maven) | https://customer.4.187.236.253.nip.io/swagger-ui/index.html |
 | Chat API (Python) | https://chatgptrag.4.187.236.253.nip.io/docs |
 
-## 🔗 Tracing and Monitoring Urls Links
+## 🔗 Infra Monitoring / Logging / Messaging Urls Links
 
 | Resource   | Url |
 |------------|---------|
@@ -39,16 +37,8 @@ Summary
 | Rabbit MQ  | http://rabbitmq.135.235.243.70.nip.io/ | 
 | Grafana    | http://grafana.135.235.243.70.nip.io/ | 
 | Prometheus | http://prometheus.135.235.243.70.nip.io/ | 
-
-**I have deleted the Azure resources due to high costs, so the links below are no longer accessible**
-
-## 🔗 Infra Monitoring / Logging / Messaging Urls Links
-
-| Resource | Url |
-|----------|---------|
 | Jaeger   | http://jaeger.135.235.243.70.nip.io/ | 
-| Kibana   | http://kibana.20.251.183.221.nip.io/ | 
-
+| Kibana   | http://kibana.135.235.243.70.nip.io/ | 
 
 # eShop Microservices - High Level Design
 
