@@ -669,7 +669,7 @@ Data is indexed in Azure Cognitive Search
 
 ---
 
-### 2. Catalog API
+### 2. InventoryApi
 
 **InventoryApi** is a robust, production-ready .NET 9.0 Razor Pages service for managing inventory across multiple stores. It provides APIs for inventory reservation, allocation, release, and confirmation, supporting distributed, event-driven architectures and seamless integration with other microservices.
 
