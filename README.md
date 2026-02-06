@@ -669,7 +669,80 @@ Data is indexed in Azure Cognitive Search
 
 ---
 
-### 2. Basket API
+### 2. Catalog API
+
+**InventoryApi** is a robust, production-ready .NET 9.0 Razor Pages service for managing inventory across multiple stores. It provides APIs for inventory reservation, allocation, release, and confirmation, supporting distributed, event-driven architectures and seamless integration with other microservices.
+
+---
+
+## Features
+
+- **Multi-Store Inventory Management:**  
+  Track and manage inventory for products across multiple physical or logical stores.
+- **Inventory Reservation:**  
+  Reserve inventory for orders, ensuring stock is held for pending transactions.
+- **Release & Confirm Operations:**  
+  - **Release:** Frees up reserved inventory if an order is canceled or fails.
+  - **Confirm:** Finalizes inventory deduction when an order is completed.
+- **Allocation Strategies:**  
+  Pluggable strategies (e.g., LargestAvailable, SplitAcrossStores) to determine how inventory is allocated across stores.
+- **Event-Driven Outbox Pattern:**  
+  Reliable event publishing for inventory changes using an outbox store and background publisher.
+- **OpenTelemetry Instrumentation:**  
+  Built-in distributed tracing and metrics for observability.
+- **Swagger/OpenAPI:**  
+  Interactive API documentation and testing.
+- **CORS Support:**  
+  Configurable cross-origin resource sharing for secure API access.
+- **Serilog Logging:**  
+  Structured, high-performance logging.
+
+---
+
+## Architecture Overview
+
+- **CQRS & MediatR**: Command and Query Responsibility Segregation for clean separation of reads and writes.
+- **Marten**: PostgreSQL-backed document storage for inventory and reservation data.
+- **Dependency Injection**: Scoped and singleton services for repositories, strategies, and background jobs.
+- **Outbox Publisher**: Ensures reliable event delivery to message brokers (e.g., RabbitMQ).
+
+---
+
+## Key Concepts
+
+### Multi-Store Inventory
+
+- Each product can exist in multiple stores.
+- Inventory is tracked per store and per product.
+- Allocation strategies determine which store(s) fulfill a reservation.
+
+### Reservation Flow
+
+1. **Reserve**:  
+   - Client requests to reserve a quantity of a product.
+   - Allocation strategy selects the best store(s).
+   - Inventory is marked as reserved, and an outbox event is created.
+2. **Confirm**:  
+   - Upon successful order/payment, the reservation is confirmed.
+   - Inventory is deducted, and a confirmation event is published.
+3. **Release**:  
+   - If an order is canceled or fails, the reservation is released.
+   - Inventory is made available again, and a release event is published.
+
+### Allocation Strategies
+
+- **LargestAvailableStrategy** (default):  
+  Allocates from the store with the largest available stock.
+- **SplitAcrossStoresStrategy** (optional):  
+  Splits allocation across multiple stores if needed.
+
+---
+
+## Project Structure
+
+---
+
+### 3. Basket API
 
 **Purpose**: Shopping cart and session management
 
@@ -690,7 +763,7 @@ Data is indexed in Azure Cognitive Search
 
 ---
 
-### 3. Discount API
+### 4. Discount API
 
 **Purpose**: Coupon and promotion management
 
@@ -706,7 +779,7 @@ Data is indexed in Azure Cognitive Search
 
 ---
 
-### 4. Ordering API - Domain-Driven Design
+### 5. Ordering API - Domain-Driven Design
 
 **Purpose**: Complete order lifecycle management
 
