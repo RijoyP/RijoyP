@@ -18,6 +18,8 @@ Summary
 
 ## 🔗 Backend Urls Links
 
+## Removed Azure Resources due to the high cost, below url wont work
+
 | Backend | Urls |
 |------------|---------|
 | Front End React (React Typescript) | https://eshopreact.4.187.236.253.nip.io/ | 
