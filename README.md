@@ -18,20 +18,22 @@ Summary
 
 ## 🔗 Backend Urls Links
 
-## Removed Azure Resources due to the high cost, below url wont work
+
 
 | Backend | Urls |
 |------------|---------|
-| Front End React (React Typescript) | https://eshopreact.4.187.236.253.nip.io/ | 
-| Catatlog API (ASP.NET Core 8.0) | https://catalog.4.187.236.253.nip.io/swagger/index.html | 
-| Discount API (ASP.NET Core 8.0) | https://discount.4.187.236.253.nip.io/swagger/index.html | 
-| Basket API (ASP.NET Core 8.0) | https://basket.4.187.236.253.nip.io/swagger/index.html |
-| Order API (ASP.NET Core 8.0) | https://order.4.187.236.253.nip.io/swagger/index.html |
-| Payment API (ASP.NET Core 9.0) | https://payment.4.187.236.253.nip.io/swagger/index.html |
-| Customer API (Java : Maven) | https://customer.4.187.236.253.nip.io/swagger-ui/index.html |
-| Chat API (Python) | https://chatgptrag.4.187.236.253.nip.io/docs |
+| Front End React (React Typescript) | https://eshopreact.4.247.194.17.nip.io/ | 
+| Catatlog API (ASP.NET Core 8.0) | https://catalog.4.247.194.17.nip.io/swagger/index.html | 
+| Discount API (ASP.NET Core 8.0) | https://discount.4.247.194.17.nip.io/swagger/index.html | 
+| Basket API (ASP.NET Core 8.0) | https://basket.4.247.194.17.io/swagger/index.html |
+| Order API (ASP.NET Core 8.0) | https://order.4.247.194.17.nip.io/swagger/index.html |
+| Payment API (ASP.NET Core 9.0) | https://payment.4.247.194.17.nip.io/swagger/index.html |
+| Customer API (Java : Maven) | https://customer.4.247.194.17.nip.io/swagger-ui/index.html |
+| Chat API (Python) | https://chatgptrag.4.247.194.17.nip.io/docs |
 
 ## 🔗 Infra Monitoring / Logging / Messaging Urls Links
+
+## Removed below Resources due to the high cost, below url wont work
 
 | Resource   | Url |
 |------------|---------|
