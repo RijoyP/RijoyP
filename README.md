@@ -19,7 +19,7 @@ Summary
 ## 🔗 Backend Urls Links
 
 
-# Removed below Resources due to the high cost, below url wont work
+### Removed below Resources due to the high cost, below url wont work
 | Backend | Urls |
 |------------|---------|
 | Front End React (React Typescript) | https://eshopreact.4.247.194.17.nip.io/ | 
@@ -33,7 +33,7 @@ Summary
 
 ## 🔗 Infra Monitoring / Logging / Messaging Urls Links
 
-# Removed below Resources due to the high cost, below url wont work
+### Removed below Resources due to the high cost, below url wont work
 
 | Resource   | Url |
 |------------|---------|
